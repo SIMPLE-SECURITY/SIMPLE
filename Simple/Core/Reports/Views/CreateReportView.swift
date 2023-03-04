@@ -112,11 +112,16 @@ struct CreateReportView: View {
                 } label: {
                     Text("Send Report")
                         .fontWeight(.semibold)
+                        
+                        .frame(width: UIScreen.main.bounds.width - 40, height: 50)
+                        .frame(maxWidth: 675)
+//                                .frame(maxWidth: 600)
+//                                .frame(height: 44)
+                        .background(Color(.systemBlue))
                         .foregroundColor(.white)
-                        .frame(width: UIScreen.main.bounds.width - 32, height: 50)
+                        .cornerRadius(10)
                 }
-                .background(Color(.systemBlue))
-                .cornerRadius(10) 
+                .padding(.bottom, 10)
             }
             .navigationDestination(isPresented: $showLocationSearch, destination: {
                 LocationSearchView(viewModel: viewModel, selectedLocation: .constant(""))

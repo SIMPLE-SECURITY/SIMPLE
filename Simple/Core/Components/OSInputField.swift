@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct OSInputField: View {
+    @Environment(\.colorScheme) var colorScheme
     @Binding var text: String
     let title: String
     let placeholder: String
@@ -17,7 +18,7 @@ struct OSInputField: View {
         VStack(alignment: .leading, spacing: 12) {
             // title
             Text(title)
-                .foregroundColor(Color(.darkGray))
+                .foregroundColor(Color(colorScheme == .dark ? .white : .darkGray))
                 .fontWeight(.semibold)
                 .font(.footnote)
             
@@ -33,6 +34,7 @@ struct OSInputField: View {
             
             // divider
             Divider()
+//                .overlay(Color(.lightGray))
         }
     }
 }

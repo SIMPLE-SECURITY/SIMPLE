@@ -53,28 +53,60 @@ struct ReportDetailsView: View {
             
             if viewModel.isEligibleToUpdateReport(self.report) {
                 HStack(spacing: 12) {
-                    if report.status != .resolved {
+                    if report.status == .confirmed {
                         Button {
                             viewModel.updateReportStatus(.resolved, report: report)
                         } label: {
                             Text("RESOLVE")
                                 .fontWeight(.semibold)
-                                .frame(height: 44)
-                                .frame(maxWidth: 570)
+                                
+                                .frame(width: UIScreen.main.bounds.width - 40, height: 50)
+                                .frame(maxWidth: 675)
+//                                .frame(maxWidth: 600)
+//                                .frame(height: 44)
                                 .background(Color(.systemGreen))
                                 .foregroundColor(.white)
                                 .cornerRadius(10)
                         }
                     }
                     
-                    if report.status != .confirmed {
+                    if report.status == .resolved {
                         Button {
                             viewModel.updateReportStatus(.confirmed, report: report)
                         } label: {
                             Text("ALERT")
                                 .fontWeight(.semibold)
-                                .frame(height: 44)
-                                .frame(maxWidth: 570)
+                                
+                                .frame(width: UIScreen.main.bounds.width - 40, height: 50)
+                                .frame(maxWidth: 675)
+//                                .frame(maxWidth: 600)
+//                                .frame(height: 44)
+                                .background(Color(.systemRed))
+                                .foregroundColor(.white)
+                                .cornerRadius(10)
+                        }
+                    }
+                    
+                    if report.status == .unconfirmed {
+                        Button {
+                            viewModel.updateReportStatus(.resolved, report: report)
+                        } label: {
+                            Text("RESOLVE")
+                                .fontWeight(.semibold)
+                                .frame(width: (UIScreen.main.bounds.width / 2) - 25, height: 50)
+                                .frame(maxWidth: 330)
+                                .background(Color(.systemGreen))
+                                .foregroundColor(.white)
+                                .cornerRadius(10)
+                        }
+                        
+                        Button {
+                            viewModel.updateReportStatus(.confirmed, report: report)
+                        } label: {
+                            Text("ALERT")
+                                .fontWeight(.semibold)
+                                .frame(width: (UIScreen.main.bounds.width / 2) - 25, height: 50)
+                                .frame(maxWidth: 330)
                                 .background(Color(.systemRed))
                                 .foregroundColor(.white)
                                 .cornerRadius(10)

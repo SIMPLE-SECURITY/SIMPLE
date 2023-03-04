@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct LoginView: View {
+    @Environment(\.colorScheme) var colorScheme
     @State var email = ""
     @State var password = ""
     @EnvironmentObject var viewModel: AuthViewModel
@@ -18,7 +19,7 @@ struct LoginView: View {
                 
                 Spacer()
                 
-                Image("simple-logo")
+                Image(colorScheme == .dark ? "simple-logo-dark" : "simple-logo")
                     .resizable()
                     .frame(width: 150, height: 150)
                     .padding(.vertical, 32)
@@ -63,10 +64,10 @@ struct LoginView: View {
                             .fontWeight(.semibold)
                         Image(systemName: "arrow.right")
                     }
-                    .foregroundColor(.white)
+                    .foregroundColor(colorScheme == .dark ? .black : .white)
                     .frame(width: 175, height: 50)
                 }
-                .background(Color(.black))
+                .background(Color(colorScheme == .dark ? .white : .black))
                 .cornerRadius(10)
                 
                 Spacer()
@@ -78,12 +79,12 @@ struct LoginView: View {
                     HStack {
                         Text("Don't have an account?")
                             .font(.system(size: 14))
-                            .foregroundColor(.black)
+                            .foregroundColor(colorScheme == .dark ? .white : .black)
                         Text("Sign Up")
                             .font(.system(size: 14, weight: .semibold))
                             .foregroundColor(.blue)
                     }
-                    .padding(.bottom, 32)
+                    .padding(.bottom, 24)
                 }
             }
             .alert(isPresented: $viewModel.showAuthAlert, content: {

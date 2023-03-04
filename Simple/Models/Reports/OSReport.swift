@@ -84,13 +84,13 @@ enum OSReportType: Int, CaseIterable, Codable, Identifiable {
     case gasLeak
     case personInjured
     case severeWeather
-//    case indecentExposure
-//    case suspiciousPerson
-//    case robbery
-//    case suspiciousPackage
-//    case civilUnrest
-//    case activeShooter
-//    case bombThreat
+    case indecentExposure
+    case suspiciousPerson
+    case robbery
+    case suspiciousPackage
+    case civilUnrest
+    case activeShooter
+    case bombThreat
     case otherThreat
     
     var id: Int {
@@ -105,13 +105,13 @@ enum OSReportType: Int, CaseIterable, Codable, Identifiable {
         case .gasLeak: return "Gas Leak"
         case .personInjured: return "Person Injured"
         case .severeWeather: return "Severe Weather"
-//        case .indecentExposure: return "Indecent Exposure"
-//        case .suspiciousPerson: return "Suspicious Person"
-//        case .robbery: return "Robbery"
-//        case .suspiciousPackage: return "Suspicious Package"
-//        case .civilUnrest: return "Civil Unrest"
-//        case .activeShooter: return "Active Shooter"
-//        case .bombThreat: return "Bomb Threat"
+        case .indecentExposure: return "Indecent Exposure"
+        case .suspiciousPerson: return "Suspicious Person"
+        case .robbery: return "Robbery"
+        case .suspiciousPackage: return "Suspicious Package"
+        case .civilUnrest: return "Civil Unrest"
+        case .activeShooter: return "Active Shooter"
+        case .bombThreat: return "Bomb Threat"
         case .otherThreat: return "Other"
         }
     }

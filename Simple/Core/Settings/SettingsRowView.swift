@@ -18,10 +18,11 @@ struct SettingsRowView: View {
                 .imageScale(.small)
                 .font(.title)
                 .foregroundColor(tintColor)
-            
+
             Text(title)
                 .font(.system(size: 15))
-                .foregroundColor(.black)
+                .foregroundColor(.primary)
+                // .foregroundColor(.black)
         }
     }
 }

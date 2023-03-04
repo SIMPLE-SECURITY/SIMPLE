@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct RegistrationView: View {
+    @Environment(\.colorScheme) var colorScheme
     @State private var fullname = ""
     @State private var email = ""
     @State private var password = ""
@@ -18,7 +19,9 @@ struct RegistrationView: View {
         
         VStack(spacing: 24) {
             
-            Image("simple-logo")
+            Spacer()
+            
+            Image(colorScheme == .dark ? "simple-logo-dark" : "simple-logo")
                 .resizable()
                 .frame(width: 150, height: 150)
                 .padding(.vertical, 32)
@@ -61,10 +64,10 @@ struct RegistrationView: View {
                         
                         Image(systemName: "arrow.right")
                     }
-                    .foregroundColor(.white)
+                    .foregroundColor(colorScheme == .dark ? .black : .white)
                     .frame(width: 175, height: 50)
                 }
-                .background(Color(.black))
+                .background(Color(colorScheme == .dark ? .white : .black))
                 .cornerRadius(10)
                 
                 HStack(spacing: 2) {
@@ -86,7 +89,7 @@ struct RegistrationView: View {
                 HStack {
                     Text("Already have an account?")
                         .font(.system(size: 14))
-                        .foregroundColor(.black)
+                        .foregroundColor(colorScheme == .dark ? .white : .black)
                     Text("Sign In")
                         .font(.system(size: 14, weight: .semibold))
                         .foregroundColor(.blue)

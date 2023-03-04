@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct ResetPasswordView: View {
+    @Environment(\.colorScheme) var colorScheme
     @State private var email = ""
     @EnvironmentObject var viewModel: AuthViewModel
     @Environment(\.dismiss) private var dismiss
@@ -19,7 +20,7 @@ struct ResetPasswordView: View {
             Spacer()
                 .frame(height: 75)
             
-            Image("reset")
+            Image(colorScheme == .dark ? "reset-dark" : "reset")
                 .resizable()
                 .frame(width: 140, height: 140*2500/2429)
                 .padding(.vertical, 32)
@@ -41,11 +42,11 @@ struct ResetPasswordView: View {
                         .fontWeight(.semibold)
                     Image(systemName: "arrow.right")
                 }
-                .foregroundColor(.white)
+                .foregroundColor(colorScheme == .dark ? .black : .white)
                 .frame(width: 200, height: 50)
 //                .frame(width: UIScreen.main.bounds.width - 165, height: 50)
             }
-            .background(Color(.black))
+            .background(Color(colorScheme == .dark ? .white : .black))
 //            .background(Color(.systemBlue))
             .cornerRadius(10)
             .padding()

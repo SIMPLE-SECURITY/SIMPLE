@@ -44,7 +44,7 @@ enum AuthenticationError: Error {
         case .passwordFormatting:
             return "Your password must be at least 6 characters or more. Please try again."
         case .unverifiedEmail:
-            return "It looks like your email hasn't been verified yet. Please check your inbox and try again, or click the button to resend the verification link."
+            return "It looks like your email hasn't been verified yet. Please check your inbox and try again, or click below the button to resend the verification link."
         case .emailVerificationSent:
             return "It looks like we already sent you an email. Please check your inbox and try again."
         case .unknown:

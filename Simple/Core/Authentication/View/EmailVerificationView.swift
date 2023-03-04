@@ -8,14 +8,16 @@
 import SwiftUI
 
 struct EmailVerificationView: View {
+    @Environment(\.colorScheme) var colorScheme
     @EnvironmentObject var viewModel: AuthViewModel
 
     var body: some View {
         VStack {
+//            Spacer()
+//                .frame(height: 75)
             Spacer()
-                .frame(height: 75)
             
-            Image("sent-verify")
+            Image(colorScheme == .dark ? "sent-verify-dark" : "sent-verify")
                 .resizable()
                 .frame(width: 140, height: 140*2500/2401)
                 .foregroundColor(Color(.systemBlue))
@@ -45,11 +47,11 @@ struct EmailVerificationView: View {
                         .fontWeight(.semibold)
                     Image(systemName: "arrow.right")
                 }
-                .foregroundColor(.white)
+                .foregroundColor(colorScheme == .dark ? .black : .white)
                 .frame(width: 165, height: 70)
 //                .frame(width: UIScreen.main.bounds.width - 165, height: 50)
             }
-            .background(Color(.black))
+            .background(Color(colorScheme == .dark ? .white : .black))
 //            .background(Color(.systemBlue))
             .cornerRadius(10)
             .padding(.vertical, 24)
@@ -59,6 +61,7 @@ struct EmailVerificationView: View {
             } label: {
                 HStack(spacing: 4) {
                     Text("Didn't receive the email?")
+                        .foregroundColor(colorScheme == .dark ? .white : .black)
                     
                     Text("Click to resend")
                         .fontWeight(.semibold)
@@ -68,6 +71,7 @@ struct EmailVerificationView: View {
 
             Spacer()
             
+           
             Button {
                 viewModel.signout()
             } label: {
@@ -77,8 +81,10 @@ struct EmailVerificationView: View {
                         .fontWeight(.semibold)
                 }
                 .font(.footnote)
+                .padding(.bottom, 24)
             }
-            .frame(alignment: .bottom)
+            
+            
         }
         .alert(isPresented: $viewModel.showAuthAlert, content: {
             Alert(title: Text("Error"), message: Text(viewModel.authError?.description ?? AuthenticationError.unknown.description))

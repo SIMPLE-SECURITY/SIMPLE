@@ -19,7 +19,7 @@ class OSMapViewModel: ObservableObject {
     var didExecuteFetchReports = false
     var listeners = [ListenerRegistration]()
     
-    func reportIsFresh(_ report: OSReport) ->Bool {
+    func reportIsFresh(_ report: OSReport) -> Bool {
         let reportTimestamp = report.lastUpdated.dateValue()
         let diffInSeconds = Int(Date().timeIntervalSince1970 - reportTimestamp.timeIntervalSince1970)
         return diffInSeconds <= report.status.expirationTimeInSeconds

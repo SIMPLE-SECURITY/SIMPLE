@@ -8,14 +8,15 @@
 import SwiftUI
 
 struct SendEmailVerificationView: View {
+    @Environment(\.colorScheme) var colorScheme
     @EnvironmentObject var viewModel: AuthViewModel
     
     var body: some View {
         VStack {
-            Spacer()
-                .frame(height: 75)
+//            Spacer()
+//                .frame(height: 75)
             
-            Image("send-verify")
+            Image(colorScheme == .dark ? "send-verify-dark" : "send-verify")
                 .resizable()
                 .frame(width: 140, height: 140*2500/2151)
                 .foregroundColor(Color(.systemBlue))
@@ -44,11 +45,11 @@ struct SendEmailVerificationView: View {
                         .fontWeight(.semibold)
                     Image(systemName: "arrow.right")
                 }
-                .foregroundColor(.white)
+                .foregroundColor(colorScheme == .dark ? .black : .white)
                 .frame(width: 160, height: 50)
 //                .frame(width: UIScreen.main.bounds.width - 190, height: 50)
             }
-            .background(Color(.black))
+            .background(Color(colorScheme == .dark ? .white : .black))
 //            .background(Color(.systemBlue))
             .cornerRadius(10)
             .padding(.vertical, 24)
