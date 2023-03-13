@@ -5,7 +5,7 @@ All files necessary for app functionality are in this repository.
 For more information
 For code-related inquiries, please create an issue in the repository page.  
 For other inquiries, please contact charlesshin@simple-secure.org.  
-For more information about SIMPLE, please visit our website at https://www.simple-secure.org/.
+For more information about SIMPLE, please visit our website at https://www.simple-secure.org/.  
 Founded and developed by Charles Shin (tlsgusdn1107).  
 
 Version: 1.0  
