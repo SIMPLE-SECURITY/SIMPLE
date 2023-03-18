@@ -7,7 +7,7 @@
 
 import Firebase
 
-let polices = ["tlsgusdn63@gmail.com", "jjacks48@jhu.edu"]
+let polices = ["ashin2022@gmail.com", "jjacks48@jhu.edu"] // first email is for developer's administrative use
 let institutionalEmailDomains = ["@jhu.edu", "@jh.edu", "@jhmi.edu", "@chadwickschool.org", "@harvard.edu", "@yale.edu", "@mit.edu", "@stanford.edu", "@princeton.edu", "@columbia.edu", "@upenn.edu", "@seas.upenn.edu"]
 
 private let REF = Firestore.firestore()

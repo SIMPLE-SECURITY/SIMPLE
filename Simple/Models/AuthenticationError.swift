@@ -55,7 +55,7 @@ enum AuthenticationError: Error {
         case .emailVerificationSent:
             return "It looks like we already sent you an email. Please check your inbox and try again."
         case .nameHasEmoji:
-            return "Names should not have emojis. Please try again."
+            return "Name should not have emojis. Please try again."
         case .emailIsNotInAcademia:
             return "This email address is not part of the registered institutions. We need your institutional email to prevent spamming. Please contact charlesshin@simple-secure.org to add your institution."
         case .unknown:

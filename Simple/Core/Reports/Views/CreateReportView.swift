@@ -14,6 +14,8 @@ struct CreateReportView: View {
     @State private var shouldRemainAnonymous = false
     @State private var selectedLocationType: OSReportLocationType = .current
     @State private var showLocationSearch = false
+    @State private var showInfo = false
+    @State private var policeShowInfo = false
     @StateObject private var viewModel = OSReportViewModel()
     @EnvironmentObject var authViewModel: AuthViewModel
     @Environment(\.dismiss) var dismiss
@@ -100,12 +102,41 @@ struct CreateReportView: View {
                     Section {
                         if (userName.contains("👮‍♂️")) {
                             Toggle(isOn: $shouldBeAlerted) {
-                                Text("Resolve or Alert")
+                                HStack {
+                                    Text("Resolve or Alert")
+                                    Button(action: {
+                                        self.policeShowInfo.toggle()
+                                    }) {
+                                        Image(systemName: "info.circle")
+                                            .foregroundColor(Color(.systemRed))
+                                    }
+                                }
                             }
                             .toggleStyle(CheckmarkToggleStyle())
+                            .alert(isPresented: $policeShowInfo) {
+                                Alert(
+                                    title: Text("Report Status"),
+                                    message: Text("Police reports can exist in two states: resolved or alerted. Resolved reports are typically used for general notifications, whereas alerted reports are reserved for emergency situations."),
+                                    dismissButton: .default(Text("OK"))
+                                )
+                            }
                         } else {
                             Toggle(isOn: $shouldRemainAnonymous) {
-                                Text("Remain Anonymous")
+                                HStack {
+                                    Text("Remain Anonymous")
+                                    Button(action: {
+                                        self.showInfo.toggle()
+                                    }) {
+                                        Image(systemName: "info.circle")
+                                    }
+                                }
+                            }
+                            .alert(isPresented: $showInfo) {
+                                Alert(
+                                    title: Text("Anonymous Reports"),
+                                    message: Text("Anonymous reports are initially shared only with the police for verification purposes. Non-anonymous reports, on the other hand, are immediately broadcast to those in your vicinity."),
+                                    dismissButton: .default(Text("OK"))
+                                )
                             }
                         }
                     }
