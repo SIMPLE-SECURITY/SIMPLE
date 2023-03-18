@@ -13,15 +13,14 @@ struct SettingsView: View {
     @State private var notificationsEnabled = false
     var body: some View {
         VStack(alignment: .leading) {
-            
             if let user = viewModel.currentUser {
                 HStack (spacing: 15) {
-                    Text(user.initials)
-                        .font(.title)
+                    Text((user.fullname).contains("👮‍♂️") ? "Police" : user.initials)
+                        .font(polices.contains(user.email) ? .title2 : .title)
                         .fontWeight(.semibold)
                         .foregroundColor(.white)
                         .frame(width: 80, height: 80)
-                        .background(Color(.systemGray3))
+                        .background(Color(polices.contains(user.email) ? .systemGray : .systemGray3))
                         .clipShape(Circle())
                     
                     VStack(alignment: .leading, spacing: 4) {
@@ -113,12 +112,12 @@ struct SettingsView: View {
                                         title: "Source Code",
                                         tintColor: Color(.systemTeal))
                     }
-                        
-                        Spacer()
-                        
-                        Text("March release")
-                            .font(.system(size: 14))
-                            .foregroundColor(.gray)
+//
+//                        Spacer()
+//
+//                        Text("March release")
+//                            .font(.system(size: 14))
+//                            .foregroundColor(.gray)
                     }
                 }
                 

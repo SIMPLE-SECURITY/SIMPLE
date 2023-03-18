@@ -52,9 +52,9 @@ struct RegistrationView: View {
                 Button {
                     Task {
                         try await viewModel.registerUser(
-                            withEmail: email,
+                            withEmail: email.trimmingCharacters(in: .whitespacesAndNewlines),
                             password: password,
-                            fullname: fullname
+                            fullname: fullname.trimmingCharacters(in: .whitespacesAndNewlines)
                         )
                     }
                 } label: {

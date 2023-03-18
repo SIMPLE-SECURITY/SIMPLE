@@ -11,6 +11,7 @@ import Firebase
 struct ReportDetailsView: View {
     let report: OSReport
     @StateObject var viewModel = OSReportViewModel()
+    @EnvironmentObject var authViewModel: AuthViewModel
     @Environment(\.dismiss) var dismiss
     
     var body: some View {
@@ -45,57 +46,46 @@ struct ReportDetailsView: View {
                     
                     ReportDetailRowView(model: .init(title: "Last Updated", description: report.lastUpdated.dateString()))
                     
+                    ReportDetailRowView(model: .init(title: "Updated By", description: report.updaterUsername))
+                    
+                    ReportDetailRowView(model: .init(title: "Updater Email", description: report.updaterEmail))
+                                        
                     ReportDetailRowView(model: .init(title: "Reported By", description: report.reportedByDescription))
+                    
+                    ReportDetailRowView(model: .init(title: "Reporter Email", description: report.reportedByDescriptionEmail))
                 } header: {
                     Text("Details")
                 }
             }
             
+            let userName = authViewModel.currentUser?.fullname ?? "n/a"
+            let userIsPolice = userName.contains("👮‍♂️")
+            let updaterName = report.updaterUsername
+            let reportInvolvesPolice = updaterName.contains("👮‍♂️") // police-affiliated reports can only be edited by polices
+            
             if viewModel.isEligibleToUpdateReport(self.report) {
                 HStack(spacing: 12) {
-                    if report.status == .confirmed {
+                    if (userIsPolice) {
                         Button {
                             viewModel.updateReportStatus(.resolved, report: report)
                         } label: {
                             Text("RESOLVE")
                                 .fontWeight(.semibold)
-                                
-                                .frame(width: UIScreen.main.bounds.width - 40, height: 50)
-                                .frame(maxWidth: 675)
-//                                .frame(maxWidth: 600)
-//                                .frame(height: 44)
+                                .frame(width: (UIScreen.main.bounds.width / 3) - 20, height: 50)
+                                .frame(maxWidth: 218.3)
                                 .background(Color(.systemGreen))
                                 .foregroundColor(.white)
                                 .cornerRadius(10)
                         }
-                    }
-                    
-                    if report.status == .resolved {
+                        
                         Button {
-                            viewModel.updateReportStatus(.confirmed, report: report)
+                            viewModel.updateReportStatus(.removed, report: report)
                         } label: {
-                            Text("ALERT")
+                            Text("DELETE")
                                 .fontWeight(.semibold)
-                                
-                                .frame(width: UIScreen.main.bounds.width - 40, height: 50)
-                                .frame(maxWidth: 675)
-//                                .frame(maxWidth: 600)
-//                                .frame(height: 44)
-                                .background(Color(.systemRed))
-                                .foregroundColor(.white)
-                                .cornerRadius(10)
-                        }
-                    }
-                    
-                    if report.status == .unconfirmed {
-                        Button {
-                            viewModel.updateReportStatus(.resolved, report: report)
-                        } label: {
-                            Text("RESOLVE")
-                                .fontWeight(.semibold)
-                                .frame(width: (UIScreen.main.bounds.width / 2) - 25, height: 50)
-                                .frame(maxWidth: 330)
-                                .background(Color(.systemGreen))
+                                .frame(width: (UIScreen.main.bounds.width / 3) - 20, height: 50)
+                                .frame(maxWidth: 218.3)
+                                .background(Color(.systemBlue))
                                 .foregroundColor(.white)
                                 .cornerRadius(10)
                         }
@@ -105,11 +95,81 @@ struct ReportDetailsView: View {
                         } label: {
                             Text("ALERT")
                                 .fontWeight(.semibold)
-                                .frame(width: (UIScreen.main.bounds.width / 2) - 25, height: 50)
-                                .frame(maxWidth: 330)
+                                .frame(width: (UIScreen.main.bounds.width / 3) - 20, height: 50)
+                                .frame(maxWidth: 218.3)
                                 .background(Color(.systemRed))
                                 .foregroundColor(.white)
                                 .cornerRadius(10)
+                        }
+                    } else {
+                        if (reportInvolvesPolice) {
+                            Text("This report can only be moderated by polices now.")
+                                .font(.subheadline)
+                                .multilineTextAlignment(.center)
+                                .foregroundColor(.gray)
+                                .padding(.horizontal, 24)
+                                .padding(.top, 32)
+                                .padding(.bottom, 32)
+                        } else { // when both sides are not polices
+                            if report.status == .confirmed {
+                                Button {
+                                    viewModel.updateReportStatus(.resolved, report: report)
+                                } label: {
+                                    Text("RESOLVE")
+                                        .fontWeight(.semibold)
+                                        
+                                        .frame(width: UIScreen.main.bounds.width - 40, height: 50)
+                                        .frame(maxWidth: 675)
+        //                                .frame(maxWidth: 600)
+        //                                .frame(height: 44)
+                                        .background(Color(.systemGreen))
+                                        .foregroundColor(.white)
+                                        .cornerRadius(10)
+                                }
+                            }
+                            
+                            if report.status == .resolved {
+                                Button {
+                                    viewModel.updateReportStatus(.confirmed, report: report)
+                                } label: {
+                                    Text("ALERT")
+                                        .fontWeight(.semibold)
+                                        
+                                        .frame(width: UIScreen.main.bounds.width - 40, height: 50)
+                                        .frame(maxWidth: 675)
+        //                                .frame(maxWidth: 600)
+        //                                .frame(height: 44)
+                                        .background(Color(.systemRed))
+                                        .foregroundColor(.white)
+                                        .cornerRadius(10)
+                                }
+                            }
+                            
+                            if report.status == .unconfirmed {
+                                Button {
+                                    viewModel.updateReportStatus(.resolved, report: report)
+                                } label: {
+                                    Text("RESOLVE")
+                                        .fontWeight(.semibold)
+                                        .frame(width: (UIScreen.main.bounds.width / 2) - 25, height: 50)
+                                        .frame(maxWidth: 332.5)
+                                        .background(Color(.systemGreen))
+                                        .foregroundColor(.white)
+                                        .cornerRadius(10)
+                                }
+                                
+                                Button {
+                                    viewModel.updateReportStatus(.confirmed, report: report)
+                                } label: {
+                                    Text("ALERT")
+                                        .fontWeight(.semibold)
+                                        .frame(width: (UIScreen.main.bounds.width / 2) - 25, height: 50)
+                                        .frame(maxWidth: 332.5)
+                                        .background(Color(.systemRed))
+                                        .foregroundColor(.white)
+                                        .cornerRadius(10)
+                                }
+                            }
                         }
                     }
                 }
@@ -152,6 +212,8 @@ struct ReportDetailsView_Previews: PreviewProvider {
             ownerEmail: "ashin2022@gmail.com",
             timestamp: Timestamp(),
             lastUpdated: Timestamp(),
+            updaterUsername: "Charles Shin",
+            updaterEmail: "cshin12@jhu.edu",
             isAnonymous: true,
             geohash: "9q9hrh5sdd",
             locationString: "1 Hacker Way, Cupertino CA",

@@ -10,16 +10,19 @@ import SwiftUI
 struct CreateReportView: View {
     @State private var selectedReportType = OSReportType.medicalEmergency.rawValue
     @State private var description = ""
+    @State private var shouldBeAlerted = true
     @State private var shouldRemainAnonymous = false
     @State private var selectedLocationType: OSReportLocationType = .current
     @State private var showLocationSearch = false
     @StateObject private var viewModel = OSReportViewModel()
+    @EnvironmentObject var authViewModel: AuthViewModel
     @Environment(\.dismiss) var dismiss
     
     var body: some View {
+        let userName = authViewModel.currentUser?.fullname ?? "n/a"
         NavigationStack {
             VStack {
-                Text("Create Report")
+                Text(userName.contains("👮‍♂️") ? "Police Report" : "Create Report")
                     .fontWeight(.semibold)
                     .frame(maxWidth: .infinity)
                     .padding(.top, 12)
@@ -46,7 +49,7 @@ struct CreateReportView: View {
                                 Image(systemName: "location.square.fill")
                                     .imageScale(.medium)
                                     .font(.title)
-                                    .foregroundColor(Color(.systemBlue))
+                                    .foregroundColor(Color(userName.contains("👮‍♂️") ? .systemRed : .systemBlue))
                                 
                                 Text("Location")
                             }
@@ -61,7 +64,7 @@ struct CreateReportView: View {
                                             .frame(width: 44, height: 44)
                                             .foregroundColor(
                                                 type == selectedLocationType
-                                                ? Color(.systemBlue)
+                                                ? Color(userName.contains("👮‍♂️") ? .systemRed : .systemBlue)
                                                 : Color(.systemGray3)
                                             )
                                         
@@ -95,8 +98,15 @@ struct CreateReportView: View {
                     }
                     
                     Section {
-                        Toggle(isOn: $shouldRemainAnonymous) {
-                            Text("Remain Anonymous")
+                        if (userName.contains("👮‍♂️")) {
+                            Toggle(isOn: $shouldBeAlerted) {
+                                Text("Resolve or Alert")
+                            }
+                            .toggleStyle(CheckmarkToggleStyle())
+                        } else {
+                            Toggle(isOn: $shouldRemainAnonymous) {
+                                Text("Remain Anonymous")
+                            }
                         }
                     }
                 }
@@ -106,18 +116,19 @@ struct CreateReportView: View {
                         try await viewModel.uploadReport(
                             type: OSReportType(rawValue: selectedReportType) ?? .medicalEmergency,
                             description: description,
-                            isAnonymous: shouldRemainAnonymous
+                            isAnonymous: shouldRemainAnonymous,
+                            policeReportAlert: shouldBeAlerted
                         )
                     }
                 } label: {
-                    Text("Send Report")
+                    Text(userName.contains("👮‍♂️") ? "Broadcast Report" : "Send Report")
                         .fontWeight(.semibold)
                         
                         .frame(width: UIScreen.main.bounds.width - 40, height: 50)
                         .frame(maxWidth: 675)
 //                                .frame(maxWidth: 600)
 //                                .frame(height: 44)
-                        .background(Color(.systemBlue))
+                        .background(Color(userName.contains("👮‍♂️") ? .systemRed : .systemBlue))
                         .foregroundColor(.white)
                         .cornerRadius(10)
                 }
@@ -149,6 +160,37 @@ struct CreateReportView: View {
             .background(Color(.systemGroupedBackground))
         }
     }
+}
+
+struct CheckmarkToggleStyle: ToggleStyle {
+    
+    func makeBody(configuration: Configuration) -> some View {
+        HStack {
+            configuration.label
+            Spacer()
+            Rectangle()
+                .foregroundColor(configuration.isOn ? .red : .green)
+                .frame(width: 51, height: 31, alignment: .center)
+                .overlay(
+                    Circle()
+                        .foregroundColor(.white)
+                        .padding(.all, 3)
+                        .overlay(
+                            Image(systemName: configuration.isOn ? "exclamationmark" : "checkmark")
+                                .resizable()
+                                .aspectRatio(contentMode: .fit)
+                                .font(Font.title.weight(.black))
+                                .frame(width: 8, height: 8, alignment: .center)
+                                .foregroundColor(configuration.isOn ? .red : .green)
+                        )
+                        .offset(x: configuration.isOn ? 11 : -11, y: 0)
+                        .animation(Animation.linear(duration: 0.125))
+                        
+                ).cornerRadius(20)
+                .onTapGesture { configuration.isOn.toggle() }
+        }
+    }
+    
 }
 
 struct CreateReportView_Previews: PreviewProvider {

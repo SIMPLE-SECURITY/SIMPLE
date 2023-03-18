@@ -7,6 +7,9 @@
 
 import Firebase
 
+let polices = ["tlsgusdn63@gmail.com", "jjacks48@jhu.edu"]
+let institutionalEmailDomains = ["@jhu.edu", "@jh.edu", "@jhmi.edu", "@chadwickschool.org", "@harvard.edu", "@yale.edu", "@mit.edu", "@stanford.edu", "@princeton.edu", "@columbia.edu", "@upenn.edu", "@seas.upenn.edu"]
+
 private let REF = Firestore.firestore()
 
 let COLLECTION_USERS = REF.collection("users")
@@ -23,6 +26,8 @@ let MOCK_REPORTS: [OSReport] = [
         ownerEmail: "ashin2022@gmail.com",
         timestamp: Timestamp(),
         lastUpdated: Timestamp(),
+        updaterUsername: "Charles Shin",
+        updaterEmail: "cshin12@jhu.edu",
         isAnonymous: true,
         geohash: "9q9hrh5sdd",
         locationString: "1 Hacker Way, Cupertino CA",
@@ -38,6 +43,8 @@ let MOCK_REPORTS: [OSReport] = [
         ownerEmail: "ashin2022@gmail.com",
         timestamp: Timestamp(),
         lastUpdated: Timestamp(),
+        updaterUsername: "Charles Shin",
+        updaterEmail: "cshin12@jhu.edu",
         isAnonymous: true,
         geohash: "9q9hrh5sdd",
         locationString: "1 Hacker Way, Cupertino CA",
@@ -53,6 +60,8 @@ let MOCK_REPORTS: [OSReport] = [
         ownerEmail: "ashin2022@gmail.com",
         timestamp: Timestamp(),
         lastUpdated: Timestamp(),
+        updaterUsername: "Charles Shin",
+        updaterEmail: "cshin12@jhu.edu",
         isAnonymous: true,
         geohash: "9q9hrh5sdd",
         locationString: "1 Hacker Way, Cupertino CA",
@@ -68,6 +77,8 @@ let MOCK_REPORTS: [OSReport] = [
         ownerEmail: "ashin2022@gmail.com",
         timestamp: Timestamp(),
         lastUpdated: Timestamp(),
+        updaterUsername: "Charles Shin",
+        updaterEmail: "cshin12@jhu.edu",
         isAnonymous: true,
         geohash: "9q9hrh5sdd",
         locationString: "1 Hacker Way, Cupertino CA",

@@ -6,6 +6,31 @@
 //
 
 import Firebase
+import Foundation
+
+extension StringProtocol {
+    func index<S: StringProtocol>(of string: S, options: String.CompareOptions = []) -> Index? {
+        range(of: string, options: options)?.lowerBound
+    }
+    func endIndex<S: StringProtocol>(of string: S, options: String.CompareOptions = []) -> Index? {
+        range(of: string, options: options)?.upperBound
+    }
+    func indices<S: StringProtocol>(of string: S, options: String.CompareOptions = []) -> [Index] {
+        ranges(of: string, options: options).map(\.lowerBound)
+    }
+    func ranges<S: StringProtocol>(of string: S, options: String.CompareOptions = []) -> [Range<Index>] {
+        var result: [Range<Index>] = []
+        var startIndex = self.startIndex
+        while startIndex < endIndex,
+            let range = self[startIndex...]
+                .range(of: string, options: options) {
+                result.append(range)
+                startIndex = range.lowerBound < range.upperBound ? range.upperBound :
+                    index(range.lowerBound, offsetBy: 1, limitedBy: endIndex) ?? endIndex
+        }
+        return result
+    }
+}
 
 struct OSReport: Identifiable, Codable, Equatable {
     let id: String
@@ -17,6 +42,8 @@ struct OSReport: Identifiable, Codable, Equatable {
     let ownerEmail: String
     let timestamp: Timestamp
     let lastUpdated: Timestamp
+    let updaterUsername: String
+    let updaterEmail: String
     let isAnonymous: Bool
     let geohash: String
     let locationString: String
@@ -25,12 +52,21 @@ struct OSReport: Identifiable, Codable, Equatable {
     var reportedByDescription: String {
         return isAnonymous ? "Anonymous" : ownerUsername
     }
+    var reportedByDescriptionEmail: String {
+        var anonymousEmail = ownerEmail
+        if let index = ownerEmail.index(of: "@") {
+            let domain = String(ownerEmail[index...])
+            anonymousEmail = "*****" + String(domain) // redact specifics, but identify organization
+        }
+        return isAnonymous ? anonymousEmail : ownerEmail
+    }
 }
 
 enum OSReportStatus: Int, Codable {
     case unconfirmed
     case confirmed
     case resolved
+    case removed
     
     var description: String {
         switch self {
@@ -40,6 +76,8 @@ enum OSReportStatus: Int, Codable {
             return "**ALERT**"
         case .resolved:
             return "Resolved"
+        case .removed:
+            return "Removed"
         }
     }
     
@@ -51,6 +89,8 @@ enum OSReportStatus: Int, Codable {
             return "exclamationmark.triangle.fill"
         case .resolved:
             return "checkmark.circle.fill"
+        case .removed:
+            return "xmark.circle.fill"
         }
     }
     
@@ -62,6 +102,8 @@ enum OSReportStatus: Int, Codable {
             return .systemRed
         case .resolved:
             return .systemGreen
+        case .removed:
+            return .black
         }
     }
     
@@ -73,6 +115,8 @@ enum OSReportStatus: Int, Codable {
             return 15 * 60 // 15 minutes
         case .unconfirmed:
             return 30 * 60 // 30 minutes
+        case .removed:
+            return 0 // instant removal
         }
     }
 }

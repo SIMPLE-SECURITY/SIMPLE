@@ -13,6 +13,8 @@ enum AuthenticationError: Error {
     case passwordFormatting
     case unverifiedEmail
     case emailVerificationSent
+    case nameHasEmoji
+    case emailIsNotInAcademia
     case unknown
     
     init(localizedDescription: String) {
@@ -26,7 +28,12 @@ enum AuthenticationError: Error {
             self = .passwordFormatting
         } else if localizedDescription.contains("email address is already in use") {
             self = .emailInUse
-        } else {
+        } else if localizedDescription.contains("full name contains emoji") {
+            self = .nameHasEmoji
+        } else if localizedDescription.contains("email address is not in registered academia") {
+            self = .emailIsNotInAcademia
+        }
+        else {
             self = .unknown
         }
     }
@@ -47,6 +54,10 @@ enum AuthenticationError: Error {
             return "It looks like your email hasn't been verified yet. Please check your inbox and try again, or click below the button to resend the verification link."
         case .emailVerificationSent:
             return "It looks like we already sent you an email. Please check your inbox and try again."
+        case .nameHasEmoji:
+            return "Names should not have emojis. Please try again."
+        case .emailIsNotInAcademia:
+            return "This email address is not part of the registered institutions. We need your institutional email to prevent spamming. Please contact charlesshin@simple-secure.org to add your institution."
         case .unknown:
             return "An error occurred while searching for your account. Please try again later."
         }

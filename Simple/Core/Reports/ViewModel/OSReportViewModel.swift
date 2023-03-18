@@ -23,8 +23,8 @@ class OSReportViewModel: NSObject, ObservableObject {
     
     private var currentLocationAddressString = ""
     private var remainingTimeForNextReportUpload = 0.0
-    private let timeLimitInSeconds: Double = 20 * 60 // 20 minutes
-    private let timeLimitForUpdateInSeconds: Double = 3 * 60 // 3 minutes
+    private let timeLimitInSeconds: Double = 20 * 60 // 20 minutes, polices under same restriction in case they get hacked
+    private let timeLimitForUpdateInSeconds: Double = 3 * 60 // 3 minutes, for same reason
     private let searchCompleter = MKLocalSearchCompleter()
     private var userLocation = LocationManager.shared.userLocation
     private let minimumDistanceToUpdateReportInMeters: Double = 300
@@ -68,7 +68,7 @@ class OSReportViewModel: NSObject, ObservableObject {
 
     }
     
-    func uploadReport(type: OSReportType, description: String, isAnonymous: Bool) async throws {
+    func uploadReport(type: OSReportType, description: String, isAnonymous: Bool, policeReportAlert: Bool) async throws {
         guard isEligibleToCreateReport else {
             self.showErrorAlert = true
             self.showTimeRestrictionAlert = true
@@ -91,6 +91,11 @@ class OSReportViewModel: NSObject, ObservableObject {
         guard let fullname = UserDefaults.standard.value(forKey: "fullname") as? String else { return }
         guard let email = UserDefaults.standard.value(forKey: "email") as? String else { return }
         
+        var status: OSReportStatus = .unconfirmed
+        if (fullname.contains("👮‍♂️")) {
+            status = policeReportAlert ? .confirmed : .resolved
+        }
+        
         let report = OSReport(
             id: ref.documentID,
             geopoint: geopoint,
@@ -101,10 +106,12 @@ class OSReportViewModel: NSObject, ObservableObject {
             ownerEmail: email,
             timestamp: uploadTime,
             lastUpdated: uploadTime,
+            updaterUsername: fullname,
+            updaterEmail: email,
             isAnonymous: isAnonymous,
             geohash: geohash,
             locationString: addressString,
-            status: .unconfirmed
+            status: status
         )
         
         guard let encodedReport = try? Firestore.Encoder().encode(report) else { return }
@@ -118,19 +125,34 @@ class OSReportViewModel: NSObject, ObservableObject {
         }
     }
     
-    func resolveReport(_ report: OSReport) async {
+    func resolveReport(_ report: OSReport, _ name: String, _ email: String) async {
         try? await COLLECTION_REPORTS.document(report.id).updateData([
             "status": OSReportStatus.resolved.rawValue,
-            "lastUpdated": Timestamp()
+            "lastUpdated": Timestamp(),
+            "updaterUsername": name,
+            "updaterEmail": email
         ])
         
         didCompleteReportUpdate = true 
     }
     
-    func alert(_ report: OSReport) async {
+    func alert(_ report: OSReport, _ name: String, _ email: String) async {
         try? await COLLECTION_REPORTS.document(report.id).updateData([
             "status": OSReportStatus.confirmed.rawValue,
-            "lastUpdated": Timestamp()
+            "lastUpdated": Timestamp(),
+            "updaterUsername": name,
+            "updaterEmail": email
+        ])
+        
+        didCompleteReportUpdate = true
+    }
+    
+    func removeReport(_ report: OSReport, _ name: String, _ email: String) async {
+        try? await COLLECTION_REPORTS.document(report.id).updateData([
+            "status": OSReportStatus.removed.rawValue,
+            "lastUpdated": Timestamp(),
+            "updaterUsername": name,
+            "updaterEmail": email
         ])
         
         didCompleteReportUpdate = true
@@ -141,15 +163,18 @@ class OSReportViewModel: NSObject, ObservableObject {
             self.showTimeRestrictionForUpdateAlert = true
             return
         }
-        
+        guard let fullname = UserDefaults.standard.value(forKey: "fullname") as? String else { return }
+        guard let email = UserDefaults.standard.value(forKey: "email") as? String else { return }
         Task {
             switch status {
             case .unconfirmed:
                 break
             case .confirmed:
-                await alert(report)
+                await alert(report, fullname, email)
             case .resolved:
-                await resolveReport(report)
+                await resolveReport(report, fullname, email)
+            case .removed:
+                await removeReport(report, fullname, email)
             }
         }
         

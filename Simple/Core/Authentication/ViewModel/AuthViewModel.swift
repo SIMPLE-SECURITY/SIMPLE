@@ -17,6 +17,28 @@ enum EmailVerificationStatus: Int, Codable {
     case verified
 }
 
+// detect emoji in string
+extension String {
+
+    var notContainsEmoji: Bool {
+        for scalar in unicodeScalars {
+            switch scalar.value {
+            case 0x1F600...0x1F64F, // Emoticons
+                 0x1F300...0x1F5FF, // Misc Symbols and Pictographs
+                 0x1F680...0x1F6FF, // Transport and Map
+                 0x2600...0x26FF,   // Misc symbols
+                 0x2700...0x27BF,   // Dingbats
+                 0xFE00...0xFE0F:   // Variation Selectors
+                return false
+            default:
+                continue
+            }
+        }
+        return true
+    }
+
+}
+
 class AuthViewModel: ObservableObject {
     @Published var userSession: FirebaseAuth.User?
     @Published var emailVerificationStatus: EmailVerificationStatus = .unverified
@@ -49,15 +71,35 @@ class AuthViewModel: ObservableObject {
         }
     }
     
+    func endsWithAny(_ string: String, _ suffixes: [String]) -> Bool {
+        for suffix in suffixes {
+            if string.hasSuffix(suffix) {
+                return true
+            }
+        }
+        return false
+    }
+    
     @MainActor
     func registerUser(withEmail email: String, password: String, fullname: String) async throws {
         guard let location = locationManager.userLocation else { return }
+        guard fullname.notContainsEmoji else {
+            self.showAuthAlert = true
+            self.authError = AuthenticationError(localizedDescription: "full name contains emoji")
+            return
+        }
+        guard endsWithAny(email, institutionalEmailDomains) else {
+            self.showAuthAlert = true
+            self.authError = AuthenticationError(localizedDescription: "email address is not in registered academia")
+            return
+        }
         do {
             let result = try await Auth.auth().createUser(withEmail: email, password: password)
+            let fullnamePoliceChecked = polices.contains(email) ? fullname + " 👮‍♂️" : fullname // 'verified' icon; the only line to verify new email as part of police email addresses
             self.userSession = result.user
             let user = User(
                 uid: result.user.uid,
-                fullname: fullname,
+                fullname: fullnamePoliceChecked,
                 email: email,
                 geopoint: GeoPoint(latitude: location.latitude, longitude: location.longitude)
             )

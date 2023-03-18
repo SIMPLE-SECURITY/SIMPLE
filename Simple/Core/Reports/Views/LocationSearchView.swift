@@ -10,9 +10,11 @@ import SwiftUI
 struct LocationSearchView: View {
     @ObservedObject var viewModel: OSReportViewModel
     @Binding var selectedLocation: String?
+    @EnvironmentObject var authViewModel: AuthViewModel
     @Environment(\.dismiss) var dismiss
     
     var body: some View {
+        let userName = authViewModel.currentUser?.fullname ?? "n/a"
         VStack {
             TextField("Search for a location...", text: $viewModel.queryFragment)
                 .frame(height: 36)
@@ -26,7 +28,7 @@ struct LocationSearchView: View {
                     HStack {
                         Image(systemName: "mappin.circle.fill")
                             .resizable()
-                            .foregroundColor(.blue)
+                            .foregroundColor(Color(userName.contains("👮‍♂️") ? .systemRed : .systemBlue))
                             .accentColor(.white)
                             .frame(width: 40, height: 40)
                         

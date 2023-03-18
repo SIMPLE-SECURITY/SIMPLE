@@ -40,6 +40,7 @@ class OSMapViewModel: ObservableObject {
     @MainActor
     func fetchReports() {
         guard let userLocation = LocationManager.shared.userLocation else { return }
+        guard let fullname = UserDefaults.standard.value(forKey: "fullname") as? String else { return }
         let queryBounds = GFUtils.queryBounds(forLocation: userLocation, withRadius: radius)
                 
         let queries = queryBounds.map { bound -> Query in
@@ -56,6 +57,9 @@ class OSMapViewModel: ObservableObject {
                 for change in changes {
                     if change.type == .added {
                         guard let report = try? change.document.data(as: OSReport.self) else { return }
+                        if !fullname.contains("👮‍♂️") {
+                            guard (report.isAnonymous == false) else { continue } // if user is not police, non-anonymous reports are only displayed (anonymous reports are sent to polices for review)
+                        }
                         
                         if self.reportIsFresh(report) {
                             self.reports.append(report)
@@ -67,6 +71,10 @@ class OSMapViewModel: ObservableObject {
                         
                     } else if change.type == .modified {
                         guard let report = try? change.document.data(as: OSReport.self) else { return }
+                        if !fullname.contains("👮‍♂️") {
+                            guard (report.isAnonymous == false) else { continue }
+                        }
+
                         guard let index = self.reports.firstIndex(where: { $0.id == report.id }) else { return }
                         
                         if self.reportIsFresh(report) {
