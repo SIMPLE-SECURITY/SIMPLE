@@ -14,7 +14,7 @@ struct LocationSearchView: View {
     @Environment(\.dismiss) var dismiss
     
     var body: some View {
-        let userName = authViewModel.currentUser?.fullname ?? "n/a"
+        let userName = authViewModel.currentUser?.fullname ?? "N/A"
         VStack {
             TextField("Search for a location...", text: $viewModel.queryFragment)
                 .frame(height: 36)

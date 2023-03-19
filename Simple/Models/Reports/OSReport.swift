@@ -116,7 +116,7 @@ enum OSReportStatus: Int, Codable {
         case .unconfirmed:
             return 30 * 60 // 30 minutes
         case .removed:
-            return 0 // instant removal
+            return 1 * 60 // 1 minute for public's review
         }
     }
 }

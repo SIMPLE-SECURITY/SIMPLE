@@ -19,15 +19,18 @@ class OSReportViewModel: NSObject, ObservableObject {
     @Published var showTimeRestrictionAlert = false
     @Published var showTimeRestrictionForUpdateAlert = false
     @Published var showReportDistanceAlert = false
+    @Published var showLocalEnforcementDistanceAlert = false
     @Published var results = [MKLocalSearchCompletion]()
     
     private var currentLocationAddressString = ""
-    private var remainingTimeForNextReportUpload = 0.0
-    private let timeLimitInSeconds: Double = 20 * 60 // 20 minutes, polices under same restriction in case they get hacked
-    private let timeLimitForUpdateInSeconds: Double = 3 * 60 // 3 minutes, for same reason
+//    private var remainingTimeForNextReportUpload = 0.0
+    @Published var timeLimitInSeconds: Double = 20 * 60 // 20 minutes (police: 10 sec)
+    @Published var timeLimitForUpdateInSeconds: Double = 3 * 60 // 3 minutes (police: 5 sec)
     private let searchCompleter = MKLocalSearchCompleter()
     private var userLocation = LocationManager.shared.userLocation
-    private let minimumDistanceToUpdateReportInMeters: Double = 300
+    private var minimumDistanceToUpdateReportInMeters: Double = 100 // 100 meters (police: 300 meters)
+    private var minimumDistanceToUploadReportInMeters: Double = 100 // 100 meters (police: 300 meters)
+    private var minimumDistanceFromLocalEnforcement: Double = 50 * 1000 // half of radius covered by polices (OSMapViewModel.swift)
     
     var queryFragment: String = "" {
         didSet {
@@ -52,23 +55,44 @@ class OSReportViewModel: NSObject, ObservableObject {
         let reportLocation = report.geopoint.toCLLocation()
         let distance = userLocation.distance(from: reportLocation)
 
+        guard let fullname = UserDefaults.standard.value(forKey: "fullname") as? String else { return true }
+        minimumDistanceToUpdateReportInMeters = fullname.contains("👮‍♂️") ? 300 : 100 // if police, then they can update within 300 meters (to be flexible but also to prevent lazy updates)
         return distance <= minimumDistanceToUpdateReportInMeters
     }
     
     var isEligibleToUpdateReport: Bool {
         guard let lastUploadDate = UserDefaults.standard.value(forKey: "lastUploadTime") as? Date else { return true }
+        guard let fullname = UserDefaults.standard.value(forKey: "fullname") as? String else { return true }
+        timeLimitForUpdateInSeconds = fullname.contains("👮‍♂️") ? 5 : 3 * 60 // if police, then 5 seconds
         let timeSinceLastUploadInSeconds = Date().timeIntervalSince(lastUploadDate)
         return timeLimitForUpdateInSeconds < Double(timeSinceLastUploadInSeconds)
     }
     
     var isEligibleToCreateReport: Bool {
         guard let lastUploadDate = UserDefaults.standard.value(forKey: "lastUploadTime") as? Date else { return true }
+        guard let fullname = UserDefaults.standard.value(forKey: "fullname") as? String else { return true }
+        timeLimitInSeconds = fullname.contains("👮‍♂️") ? 10 : 20 * 60 // if police, then 10 seconds
         let timeSinceLastUploadInSeconds = Date().timeIntervalSince(lastUploadDate)
         return timeLimitInSeconds < Double(timeSinceLastUploadInSeconds)
 
     }
     
     func uploadReport(type: OSReportType, description: String, isAnonymous: Bool, policeReportAlert: Bool) async throws {
+        guard let userLocation = userLocation else { return }
+        var userIsCloseToLocalEnforcement = false
+        for location in policesLocation {
+            let eachPolicesLocation = CLLocationCoordinate2D(latitude: location[0], longitude: location[1])
+            let distanceFromUserLocation = userLocation.toCLLocation().distance(from: eachPolicesLocation.toCLLocation())
+            if distanceFromUserLocation <= minimumDistanceFromLocalEnforcement {
+                userIsCloseToLocalEnforcement = true
+                break
+            }
+        }
+        guard userIsCloseToLocalEnforcement else {
+            self.showErrorAlert = true
+            self.showLocalEnforcementDistanceAlert = true
+            return
+        }
         guard isEligibleToCreateReport else {
             self.showErrorAlert = true
             self.showTimeRestrictionAlert = true
@@ -83,7 +107,6 @@ class OSReportViewModel: NSObject, ObservableObject {
         self.showErrorAlert = false
         
         guard let uid = Auth.auth().currentUser?.uid else { return }
-        guard let userLocation = userLocation else { return }
         let geopoint = GeoPoint(latitude: userLocation.latitude, longitude: userLocation.longitude)
         let geohash = GFUtils.geoHash(forLocation: userLocation)
         let uploadTime = Timestamp()
@@ -242,8 +265,10 @@ class OSReportViewModel: NSObject, ObservableObject {
             guard let item = response.mapItems.first else { return }
             let coordinate = item.placemark.coordinate
             let distanceFromUserLocation = userLocation.toCLLocation().distance(from: coordinate.toCLLocation())
+            guard let fullname = UserDefaults.standard.value(forKey: "fullname") as? String else { return }
+            minimumDistanceToUploadReportInMeters = fullname.contains("👮‍♂️") ? 300 : 100 // if police, then they can upload within 300 meters
 
-            guard distanceFromUserLocation <= 100 else {
+            guard distanceFromUserLocation <= minimumDistanceToUploadReportInMeters else {
                 self.showErrorAlert = true
                 self.showReportDistanceAlert = true 
                 return

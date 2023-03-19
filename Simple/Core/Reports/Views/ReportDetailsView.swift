@@ -58,7 +58,7 @@ struct ReportDetailsView: View {
                 }
             }
             
-            let userName = authViewModel.currentUser?.fullname ?? "n/a"
+            let userName = authViewModel.currentUser?.fullname ?? "N/A"
             let userIsPolice = userName.contains("👮‍♂️")
             let updaterName = report.updaterUsername
             let reportInvolvesPolice = updaterName.contains("👮‍♂️") // police-affiliated reports can only be edited by polices
@@ -185,10 +185,15 @@ struct ReportDetailsView: View {
                     .padding(.bottom, 32)
             }
         }
-        .alert(isPresented: $viewModel.showTimeRestrictionForUpdateAlert, content: {
-            Alert(title: Text("Hold Up"), message:
-                    Text("To prevent spamming, we place a 3 minute hold on updating reports. Please try again later."))
-        })
+        .alert(isPresented: $viewModel.showTimeRestrictionForUpdateAlert) {
+            if (viewModel.timeLimitForUpdateInSeconds < 60) {
+                return Alert(title: Text("Updating Limit"), message:
+                        Text("To prevent spamming, we place a \(Int(viewModel.timeLimitForUpdateInSeconds)) second hold on updating reports. Please try again later.")) // police
+            } else {
+                return Alert(title: Text("Updating Limit"), message:
+                        Text("To prevent spamming, we place a \(Int(viewModel.timeLimitForUpdateInSeconds / 60)) minute hold on updating reports. Please try again later."))
+            }
+        }
         .onReceive(viewModel.$didCompleteReportUpdate, perform: { success in
             if success {
                 dismiss()

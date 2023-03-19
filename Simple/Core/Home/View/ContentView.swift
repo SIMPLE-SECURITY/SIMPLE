@@ -14,6 +14,8 @@ struct ContentView: View {
     @EnvironmentObject var authViewModel: AuthViewModel
     
     var body: some View {
+        let userName = authViewModel.currentUser?.fullname ?? "N/A"
+        let reportIcon = userName.contains("👮‍♂️") ? "airplayaudio.badge.exclamationmark" : "exclamationmark.bubble.fill"
         ZStack(alignment: .bottomTrailing) {
             OSMapView(selectedReport: $selectedReport)
                 .ignoresSafeArea()
@@ -39,7 +41,7 @@ struct ContentView: View {
                 MapViewActionButton(action: {
                     selectedMenuOption = .report
                 },
-                                    imageName: "exclamationmark.bubble.fill",
+                                    imageName: reportIcon,
                                     tintColor: Color(.red))
             }
             .sheet(item: $selectedMenuOption) { option in
@@ -67,6 +69,9 @@ struct ContentView: View {
         })
         .onAppear {
             viewModel.fetchReports()
+//            Timer.scheduledTimer(withTimeInterval: 60.0, repeats: true) { _ in
+//                viewModel.refreshReports()
+//            } recenters screen for unknown reason. check OSMapViewModel.swift
         }
         
         .ignoresSafeArea()

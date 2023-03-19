@@ -100,6 +100,41 @@ struct SettingsView: View {
                     }
                 }
                 
+                Section("Police") {
+                    HStack {
+                        Button {
+                            if let url = URL(string: "mailto:charlesshin@simple-secure.org") {
+                                openURL(url)
+                            }
+                        }
+                        label: {
+                            SettingsRowView(imageName: "envelope.badge.shield.half.filled.fill",
+                                            title: "Request Support",
+                                            tintColor: Color(.systemIndigo))
+                        }
+                    }
+                }
+                
+//                spammers are manageable
+//                if let user = viewModel.currentUser {
+//                    if (user.fullname).contains("👮‍♂️") {
+//                        Section("Police") {
+//                            HStack {
+//                                Button {
+//                                    if let url = URL(string: "mailto:charlesshin@simple-secure.org") {
+//                                        openURL(url)
+//                                    }
+//                                }
+//                                label: {
+//                                    SettingsRowView(imageName: "envelope.badge.shield.half.filled.fill",
+//                                                    title: "Request Support",
+//                                                    tintColor: Color(.systemIndigo))
+//                                }
+//                            }
+//                        }
+//                    }
+//                }
+                
                 Section("Developers") {
                     HStack {
                         Button {
@@ -145,7 +180,7 @@ struct SettingsView: View {
         .frame(maxHeight: .infinity)
         .alert(isPresented: $viewModel.deleteAlert) {
             Alert(
-                title: Text("Error"),
+                title: Text("Authentication Required"),
                 message: Text("Deleting your account requires recent authentication. Log in again before retrying it.")
             )
         }

@@ -9,6 +9,6 @@ For more information about SIMPLE, please visit our website at https://www.simpl
 Founded and developed by Charles Shin (tlsgusdn1107).  
 
 Version: 1.0  
-Build: 13
+Build: 14
 
 Copyright © 2022-2023 SIMPLE. All rights reserved.

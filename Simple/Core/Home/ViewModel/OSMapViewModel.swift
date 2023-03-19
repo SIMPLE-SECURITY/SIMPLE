@@ -15,7 +15,7 @@ class OSMapViewModel: ObservableObject {
     @Published var userRegion: MKCoordinateRegion?
     @Published var showAlert = false
     var shouldUpdateReports = false
-    private let radius: Double = 50 * 1000 // report fetching radius in meters
+    private var radius: Double = 50 * 1000 // report fetching radius in meters
     var didExecuteFetchReports = false
     var listeners = [ListenerRegistration]()
     
@@ -41,6 +41,7 @@ class OSMapViewModel: ObservableObject {
     func fetchReports() {
         guard let userLocation = LocationManager.shared.userLocation else { return }
         guard let fullname = UserDefaults.standard.value(forKey: "fullname") as? String else { return }
+        radius = fullname.contains("👮‍♂️") ? 100 * 1000 : 50 * 1000 // if police, then 2x radius
         let queryBounds = GFUtils.queryBounds(forLocation: userLocation, withRadius: radius)
                 
         let queries = queryBounds.map { bound -> Query in

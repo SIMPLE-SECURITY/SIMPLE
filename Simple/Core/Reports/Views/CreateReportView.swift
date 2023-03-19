@@ -21,7 +21,7 @@ struct CreateReportView: View {
     @Environment(\.dismiss) var dismiss
     
     var body: some View {
-        let userName = authViewModel.currentUser?.fullname ?? "n/a"
+        let userName = authViewModel.currentUser?.fullname ?? "N/A"
         NavigationStack {
             VStack {
                 Text(userName.contains("👮‍♂️") ? "Police Report" : "Create Report")
@@ -103,7 +103,7 @@ struct CreateReportView: View {
                         if (userName.contains("👮‍♂️")) {
                             Toggle(isOn: $shouldBeAlerted) {
                                 HStack {
-                                    Text("Resolve or Alert")
+                                    Text("Resolved or Alert")
                                     Button(action: {
                                         self.policeShowInfo.toggle()
                                     }) {
@@ -134,7 +134,7 @@ struct CreateReportView: View {
                             .alert(isPresented: $showInfo) {
                                 Alert(
                                     title: Text("Anonymous Reports"),
-                                    message: Text("Anonymous reports are initially shared only with the police for verification purposes. Non-anonymous reports, on the other hand, are immediately broadcast to those in your vicinity."),
+                                    message: Text("Anonymous reports are first shared only with the police for verification purposes. Non-anonymous reports, on the other hand, are immediately broadcast to those in your vicinity."),
                                     dismissButton: .default(Text("OK"))
                                 )
                             }
@@ -169,15 +169,22 @@ struct CreateReportView: View {
                 LocationSearchView(viewModel: viewModel, selectedLocation: .constant(""))
             })
             .alert(isPresented: $viewModel.showErrorAlert) {
+                if $viewModel.showLocalEnforcementDistanceAlert.wrappedValue {
+                    return Alert(title: Text("Report Unavailable"), message:
+                                    Text("You are too far away from the nearest local enforcement agency to create a report."))
+                }
                 if $viewModel.showTimeRestrictionAlert.wrappedValue {
-                    return Alert(title: Text("Error"), message:
-                                    Text("To prevent spamming, we place a 20 minute hold on reports. Please try again later."))
+                    if (viewModel.timeLimitInSeconds < 60) {
+                        return Alert(title: Text("Reporting Limit"), message: Text("To prevent spamming, we place a \(Int(viewModel.timeLimitInSeconds)) second hold on reports. Please try again later.")) // police
+                    } else {
+                        return Alert(title: Text("Reporting Limit"), message: Text("To prevent spamming, we place a \(Int(viewModel.timeLimitInSeconds / 60)) minute hold on reports. Please try again later."))
+                    }
                 }
                 if $viewModel.showReportDistanceAlert.wrappedValue {
-                    return Alert(title: Text("Error"), message:
-                                    Text("You are too far away from this location to create a report."))
+                    return Alert(title: Text("Location Unavailable"), message:
+                                    Text("You are too far away from the selected location to create a report."))
                 }
-                return Alert(title: Text("Error"), message:
+                return Alert(title: Text("Report Failed"), message:
                                 Text("An error occurred while processing your report. Please try again later."))
             }
             .onReceive(viewModel.$didUploadReport, perform: { success in
