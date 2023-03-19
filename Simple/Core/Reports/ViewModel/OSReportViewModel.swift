@@ -30,7 +30,7 @@ class OSReportViewModel: NSObject, ObservableObject {
     private var userLocation = LocationManager.shared.userLocation
     private var minimumDistanceToUpdateReportInMeters: Double = 100 // 100 meters (police: 300 meters)
     private var minimumDistanceToUploadReportInMeters: Double = 100 // 100 meters (police: 300 meters)
-    private var minimumDistanceFromLocalEnforcement: Double = 50 * 1000 // half of radius covered by polices (OSMapViewModel.swift)
+    private var minimumDistanceFromLocalEnforcementInMeters: Double = 50 * 1000 // half of radius covered by polices (OSMapViewModel.swift)
     
     var queryFragment: String = "" {
         didSet {
@@ -83,7 +83,7 @@ class OSReportViewModel: NSObject, ObservableObject {
         for location in policesLocation {
             let eachPolicesLocation = CLLocationCoordinate2D(latitude: location[0], longitude: location[1])
             let distanceFromUserLocation = userLocation.toCLLocation().distance(from: eachPolicesLocation.toCLLocation())
-            if distanceFromUserLocation <= minimumDistanceFromLocalEnforcement {
+            if distanceFromUserLocation <= minimumDistanceFromLocalEnforcementInMeters {
                 userIsCloseToLocalEnforcement = true
                 break
             }

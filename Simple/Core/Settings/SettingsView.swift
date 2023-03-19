@@ -115,7 +115,6 @@ struct SettingsView: View {
                     }
                 }
                 
-//                spammers are manageable
 //                if let user = viewModel.currentUser {
 //                    if (user.fullname).contains("👮‍♂️") {
 //                        Section("Police") {

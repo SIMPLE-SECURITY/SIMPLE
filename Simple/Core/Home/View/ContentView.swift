@@ -69,6 +69,7 @@ struct ContentView: View {
         })
         .onAppear {
             viewModel.fetchReports()
+//            refresh not automated 'til needed
 //            Timer.scheduledTimer(withTimeInterval: 60.0, repeats: true) { _ in
 //                viewModel.refreshReports()
 //            } recenters screen for unknown reason. check OSMapViewModel.swift

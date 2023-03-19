@@ -23,7 +23,7 @@ struct CreateReportView: View {
     var body: some View {
         let userName = authViewModel.currentUser?.fullname ?? "N/A"
         NavigationStack {
-            VStack {
+            VStack { // no (spacing: 0) so as to scroll contents w/o cutting out title
                 Text(userName.contains("👮‍♂️") ? "Police Report" : "Create Report")
                     .fontWeight(.semibold)
                     .frame(maxWidth: .infinity)
@@ -163,7 +163,8 @@ struct CreateReportView: View {
                         .foregroundColor(.white)
                         .cornerRadius(10)
                 }
-                .padding(.bottom, 10)
+                .padding() // needed to prevent button from skretching full width in iphones
+//                .padding(.bottom, -10) // redacted because it doesn't fit for ipad size
             }
             .navigationDestination(isPresented: $showLocationSearch, destination: {
                 LocationSearchView(viewModel: viewModel, selectedLocation: .constant(""))
