@@ -45,7 +45,7 @@ enum AuthenticationError: Error {
         case .emailDoesNotExist:
             return "We could not find a user with the provided email address. This account may have been deleted."
         case .emailInUse:
-            return "This email address is already registered. Please choose a different email and try again, or sign in with your account."
+            return "This email address is already registered. Please choose a different email and try again, or click \"Forgot Password?\" in Login page to reset your password."
         case .passwordIncorrect:
             return "Your password is incorrect or does not exist. Please try again."
         case .passwordFormatting:
