@@ -1,6 +1,7 @@
 # SIMPLE  
 Official repository for SIMPLE, an open-source initiative to ensure privacy within public safety.  
-Supporting Baltimore Police (@baltimorepolice.org) only as police department right now. To add your local law enforcement, please email charlesshin@simple-secure.org.  
+Supporting Baltimore Police (@baltimorepolice.org) only as police department right now.  
+To add your local law enforcement, please email charlesshin@simple-secure.org.  
   
 Certain information are removed from this repository to prevent misuse.   
 All files necessary for app functionality are in this repository.  
