@@ -95,7 +95,7 @@ class AuthViewModel: ObservableObject {
         }
         do {
             let result = try await Auth.auth().createUser(withEmail: email, password: password)
-            let fullnamePoliceChecked = polices.contains(email) ? fullname + " 👮‍♂️" : fullname // 'verified' icon; the only line to verify new email as part of police email addresses
+            let fullnamePoliceChecked = (polices.contains(email) || endsWithAny(email, policeEmailDomains)) ? fullname + " 👮‍♂️" : fullname // 'verified' icon; the only line to verify new email as police's
             self.userSession = result.user
             let user = User(
                 uid: result.user.uid,

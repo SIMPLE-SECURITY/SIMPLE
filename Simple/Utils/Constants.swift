@@ -7,13 +7,24 @@
 
 import Firebase
 
-let polices = [ // MUST LABEL WITH CORRESPONDING ORDERS TO "policesLocation" VARIABLE
+let polices =
+
+[ // MUST LABEL WITH CORRESPONDING ORDERS TO "policesLocation" VARIABLE
     "ashin2022@gmail.com", // personal email. for developer's administrative use
     "jjacks48@jhu.edu", // Jarron L Jackson, Baltimore Police Department
     "rrule@chadwickschool.org" // Bob Rule, Chadwick School (Palos Verdes)
 ]
 
-let policesLocation = [
+
+let policeEmailDomains = // all officers with these email domains are regarded as police officers
+
+[
+    "@baltimorepolice.org"
+]
+
+let policesLocation =
+
+[
     [39.29021636231264, -76.60750005886018], // Baltimore City Police Headquarters
     [33.779345256556155, -118.36006674602402] // Chadwick School (Palos Verdes)
 ] // block reporting feature if too far from any local enforcement agencies (App Store protocol)
@@ -23,7 +34,7 @@ let policesLocation = [
 // https://github.com/Hipo/university-domains-list
 let institutionalEmailDomains =
 
-["@baltimorepolice.org"]
+policeEmailDomains
 
 +
 
