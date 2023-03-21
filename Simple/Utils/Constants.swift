@@ -7,6 +7,8 @@
 
 import Firebase
 
+// all need to be in cloud; for later
+
 let polices =
 
 // emails specially allowed to have police account (police email domains are listed in "policeEmailDomains" variable)
