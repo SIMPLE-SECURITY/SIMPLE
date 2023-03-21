@@ -81,7 +81,7 @@ class AuthViewModel: ObservableObject {
     }
     
     @MainActor
-    func registerUser(withEmail email: String, password: String, fullname: String, isPolice: Bool) async throws {
+    func registerUser(withEmail email: String, password: String, fullname: String, registeringAsPolice: Bool) async throws {
         guard let location = locationManager.userLocation else { return }
         guard fullname.notContainsEmoji else {
             self.showAuthAlert = true
@@ -93,7 +93,7 @@ class AuthViewModel: ObservableObject {
             self.authError = AuthenticationError(localizedDescription: "email address is not in registered academia")
             return
         }
-        if (isPolice == true) {
+        if (registeringAsPolice == true) {
             guard (polices.contains(email) || endsWithAny(email, policeEmailDomains)) else {
                 self.showAuthAlert = true
                 self.authError = AuthenticationError(localizedDescription: "email address is not registered as a part of the local law enforcement")
@@ -102,7 +102,7 @@ class AuthViewModel: ObservableObject {
         }
         do {
             let result = try await Auth.auth().createUser(withEmail: email, password: password)
-            let fullnamePoliceChecked = (polices.contains(email) || endsWithAny(email, policeEmailDomains)) ? fullname + " 👮‍♂️" : fullname // 'verified' icon; the only line to verify new email as police's
+            let fullnamePoliceChecked = (polices.contains(email) || endsWithAny(email, policeEmailDomains)) ? fullname + " 👮‍♂️" : fullname // 'verified' icon; verify new email as police's
             self.userSession = result.user
             let user = User(
                 uid: result.user.uid,
@@ -161,8 +161,34 @@ class AuthViewModel: ObservableObject {
     @MainActor
     func fetchUser() async {
         guard let uid = Auth.auth().currentUser?.uid else { return }
-        let snapshot = try? await Firestore.firestore().collection("users").document(uid).getDocument()
+        
+        var snapshot = try? await Firestore.firestore().collection("users").document(uid).getDocument()
         guard let user = try? snapshot?.data(as: User.self) else { return }
+        
+        // add or remove "👮‍♂️" emoji as police info gets updated in "Constants.swift"
+        let userName = user.fullname
+        let userEmail = user.email
+        let userIsPolice = (polices.contains(userEmail) || endsWithAny(userEmail, policeEmailDomains))
+        let userIsCataloguedAsPolice = (userName).contains("👮‍♂️")
+
+        if userIsPolice {
+            if !userIsCataloguedAsPolice {
+                 try? await COLLECTION_USERS.document(uid).updateData([
+                     "fullname": userName + " 👮‍♂️"
+                 ])
+            }
+            } else {
+            if userIsCataloguedAsPolice {
+                try? await COLLECTION_USERS.document(uid).updateData([
+                    "fullname": String(userName.prefix(userName.count - 2))
+                ])
+            }
+        }
+        
+        // redeclare snapshot and "user" variable
+        snapshot = try? await Firestore.firestore().collection("users").document(uid).getDocument()
+        guard let user = try? snapshot?.data(as: User.self) else { return }
+        
         self.currentUser = user
         
         UserDefaults.standard.set(user.fullname, forKey: "fullname")

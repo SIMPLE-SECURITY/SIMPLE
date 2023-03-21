@@ -79,7 +79,7 @@ struct RegistrationView: View {
                             withEmail: email.trimmingCharacters(in: .whitespacesAndNewlines),
                             password: password,
                             fullname: fullname.trimmingCharacters(in: .whitespacesAndNewlines),
-                            isPolice: registerAsPolice
+                            registeringAsPolice: registerAsPolice
                         )
                     }
                 } label: {
