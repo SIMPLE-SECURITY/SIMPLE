@@ -125,6 +125,9 @@ struct RegistrationView: View {
         .alert(isPresented: $viewModel.showAuthAlert, content: {
             Alert(title: Text("Error"), message: Text(viewModel.authError?.description ?? AuthenticationError.unknown.description))
         })
+        .onTapGesture {
+            hideKeyboard()
+        }
     }
 }
 

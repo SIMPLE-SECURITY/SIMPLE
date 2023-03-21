@@ -66,6 +66,9 @@ struct ResetPasswordView: View {
             }
             .frame(alignment: .bottom)
         }
+        .onTapGesture {
+            hideKeyboard()
+        }
     }
 }
 

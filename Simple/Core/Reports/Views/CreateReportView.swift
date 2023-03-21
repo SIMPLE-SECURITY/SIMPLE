@@ -216,6 +216,9 @@ struct CreateReportView: View {
                     dismiss()
                 }
             })
+            .onTapGesture {
+                hideKeyboard()
+            }
             .onAppear {
                 showLocationSearch = false
             }

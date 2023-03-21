@@ -91,6 +91,9 @@ struct LoginView: View {
                 Alert(title: Text("Error"), message: Text(viewModel.authError?.description ?? AuthenticationError.unknown.description))
             })
         }
+        .onTapGesture {
+            hideKeyboard()
+        }
     }
 }
 

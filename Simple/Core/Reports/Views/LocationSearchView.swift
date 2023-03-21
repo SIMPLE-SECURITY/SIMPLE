@@ -56,6 +56,9 @@ struct LocationSearchView: View {
             
             Spacer()
         }
+        .onTapGesture {
+            hideKeyboard()
+        }
     }
 }
 
