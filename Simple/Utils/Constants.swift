@@ -9,15 +9,18 @@ import Firebase
 
 let polices =
 
-// emails for special purposes (police email domains are listed in "policeEmailDomains" variable)
+// emails specially allowed to have police account (police email domains are listed in "policeEmailDomains" variable)
 
 [
     "ashin2022@gmail.com", // personal email. for developer's administrative use
     "jjacks48@jhu.edu", // Jarron L Jackson, Baltimore Police Department
-    "rrule@chadwickschool.org" // Bob Rule, Chadwick School (Palos Verdes)
+    "rrule@chadwickschool.org", // Bob Rule, Chadwick School (Palos Verdes)
+    "thill@chadwickschool.org" // Ted Hill, Chadwick International (South Korea)
 ]
 
 let policesLocation =
+
+// block reporting feature if too far from any local enforcement agencies (App Store protocol)
 
 [
     [42.33618904978958, -83.0570091573357], // Detroit Police Department
@@ -47,8 +50,9 @@ let policesLocation =
     [39.78166032373341, -86.15575728139848], // Indianapolis Metropolitan Police Department - Headquarters
     [33.70796590587893, -84.39726237311854], // Atlanta Police Department
     [38.82931509836416, -104.82367131243059], // Colorado Springs Police Department
-    [33.801474790618656, -118.39193545336349] // Palos Verdes Estates Police
-] // block reporting feature if too far from any local enforcement agencies (App Store protocol)
+    [33.801474790618656, -118.39193545336349], // Palos Verdes Estates Police
+    [37.40028383762512, 126.64472430741866] // Chadwick International School
+]
 
 let policeEmailDomains =
 
