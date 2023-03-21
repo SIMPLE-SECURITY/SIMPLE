@@ -45,7 +45,11 @@ class AuthViewModel: ObservableObject {
     @Published var currentUser: User?
     @Published var authError: AuthenticationError?
     @Published var showAuthAlert = false
+    @Published var settingAlert = false
+    @Published var signoutAlert = false
     @Published var deleteAlert = false
+    @Published var changeSuccessful = false
+    @Published var changeUnsuccessful = false
     let locationManager = LocationManager.shared
     
     init() {
@@ -102,7 +106,9 @@ class AuthViewModel: ObservableObject {
         }
         do {
             let result = try await Auth.auth().createUser(withEmail: email, password: password)
-            let fullnamePoliceChecked = (polices.contains(email) || endsWithAny(email, policeEmailDomains)) ? fullname + " 👮‍♂️" : fullname // 'verified' icon; verify new email as police's
+            // 'verified' icon; verify new email as police's
+            // user should be 1. registering as police (checkmark) 2. have the required email address
+            let fullnamePoliceChecked = (registeringAsPolice && (polices.contains(email) || endsWithAny(email, policeEmailDomains))) ? fullname + " 👮‍♂️" : fullname
             self.userSession = result.user
             let user = User(
                 uid: result.user.uid,
@@ -153,7 +159,11 @@ class AuthViewModel: ObservableObject {
             try Auth.auth().signOut()
             self.userSession = nil
             self.currentUser = nil
+            self.settingAlert = false
+            self.signoutAlert = false
         } catch {
+            self.settingAlert = true
+            self.signoutAlert = true
             print("DEBUG: Failed to sign out with error: \(error.localizedDescription)")
         }
     }
@@ -165,27 +175,18 @@ class AuthViewModel: ObservableObject {
         var snapshot = try? await Firestore.firestore().collection("users").document(uid).getDocument()
         guard let user = try? snapshot?.data(as: User.self) else { return }
         
-        // add or remove "👮‍♂️" emoji as police info gets updated in "Constants.swift"
         let userName = user.fullname
         let userEmail = user.email
         let userIsPolice = (polices.contains(userEmail) || endsWithAny(userEmail, policeEmailDomains))
         let userIsCataloguedAsPolice = (userName).contains("👮‍♂️")
-
-        if userIsPolice {
-            if !userIsCataloguedAsPolice {
-                 try? await COLLECTION_USERS.document(uid).updateData([
-                     "fullname": userName + " 👮‍♂️"
-                 ])
-            }
-            } else {
-            if userIsCataloguedAsPolice {
-                try? await COLLECTION_USERS.document(uid).updateData([
-                    "fullname": String(userName.prefix(userName.count - 2))
-                ])
-            }
+        
+        // if police account is now not police, then downgrade to basic account so as to prevent malicious use
+        if userIsCataloguedAsPolice && (!userIsPolice) {
+            try? await COLLECTION_USERS.document(uid).updateData([
+                "fullname": String(userName.prefix(userName.count - 2))
+            ])
         }
         
-        // redeclare snapshot and "user" variable
         snapshot = try? await Firestore.firestore().collection("users").document(uid).getDocument()
         guard let user = try? snapshot?.data(as: User.self) else { return }
         
@@ -196,15 +197,61 @@ class AuthViewModel: ObservableObject {
     }
     
     @MainActor
+    func reqeustChange() async {
+        guard let uid = Auth.auth().currentUser?.uid else { return }
+        
+        var snapshot = try? await Firestore.firestore().collection("users").document(uid).getDocument()
+        guard let user = try? snapshot?.data(as: User.self) else { return }
+
+        let userName = user.fullname
+        let userEmail = user.email
+        let userIsPolice = (polices.contains(userEmail) || endsWithAny(userEmail, policeEmailDomains))
+        let userIsCataloguedAsPolice = (userName).contains("👮‍♂️")
+
+        // only regular -> police should be checked
+        if userIsCataloguedAsPolice { // police -> regular
+            try? await COLLECTION_USERS.document(uid).updateData([
+                "fullname": String(userName.prefix(userName.count - 2))
+            ])
+            self.changeUnsuccessful = false
+            self.changeSuccessful = true
+        } else {
+            if userIsPolice {
+                try? await COLLECTION_USERS.document(uid).updateData([
+                    "fullname": userName + " 👮‍♂️"
+                ])
+                self.changeUnsuccessful = false
+                self.changeSuccessful = true
+            } else {
+                self.changeSuccessful = false
+                self.changeUnsuccessful = true
+            }
+        }
+
+        // redeclare snapshot and "user" variable
+        snapshot = try? await Firestore.firestore().collection("users").document(uid).getDocument()
+        guard let user = try? snapshot?.data(as: User.self) else { return }
+        
+        self.currentUser = user
+        
+        UserDefaults.standard.set(user.fullname, forKey: "fullname")
+        UserDefaults.standard.set(user.email, forKey: "email")
+        
+        self.settingAlert = true
+    }
+    
+    @MainActor
     func deleteAccount() async throws {
         do {
             try await Auth.auth().currentUser?.delete()
             self.currentUser = nil
             self.userSession = nil
             self.emailVerificationStatus = .unverified
+            self.settingAlert = false
             self.deleteAlert = false
         } catch {
             print("DEBUG: Failed to delete account with error \(error.localizedDescription)")
+            self.settingAlert = true
             self.deleteAlert = true
         }
     }
