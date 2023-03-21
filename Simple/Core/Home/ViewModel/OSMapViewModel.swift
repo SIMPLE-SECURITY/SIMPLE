@@ -60,6 +60,7 @@ class OSMapViewModel: ObservableObject {
                         guard let report = try? change.document.data(as: OSReport.self) else { return }
                         if !fullname.contains("👮‍♂️") {
                             guard (report.isAnonymous == false) else { continue } // if user is not police, non-anonymous reports are only displayed (anonymous reports are sent to polices for review)
+                            guard (report.showToPolicesOnly == false) else { continue } // for police-only reports
                         }
                         
                         if self.reportIsFresh(report) {
@@ -74,6 +75,7 @@ class OSMapViewModel: ObservableObject {
                         guard let report = try? change.document.data(as: OSReport.self) else { return }
                         if !fullname.contains("👮‍♂️") {
                             guard (report.isAnonymous == false) else { continue }
+                            guard (report.showToPolicesOnly == false) else { continue }
                         }
 
                         guard let index = self.reports.firstIndex(where: { $0.id == report.id }) else { return }

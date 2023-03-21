@@ -15,6 +15,7 @@ enum AuthenticationError: Error {
     case emailVerificationSent
     case nameHasEmoji
     case emailIsNotInAcademia
+    case emailIsNotRegisteredAsPolice
     case unknown
     
     init(localizedDescription: String) {
@@ -32,6 +33,8 @@ enum AuthenticationError: Error {
             self = .nameHasEmoji
         } else if localizedDescription.contains("email address is not in registered academia") {
             self = .emailIsNotInAcademia
+        } else if localizedDescription.contains("email address is not registered as a part of the local law enforcement") {
+            self = .emailIsNotRegisteredAsPolice
         }
         else {
             self = .unknown
@@ -58,6 +61,8 @@ enum AuthenticationError: Error {
             return "Name should not have emojis. Please try again."
         case .emailIsNotInAcademia:
             return "This email address is not part of the registered institutions. We need your institutional email to prevent spamming. Please contact charlesshin@simple-secure.org to add your institution."
+        case .emailIsNotRegisteredAsPolice:
+            return "This email address is not registered as a part of the local law enforcement. Please reach out to charlesshin@simple-secure.org in order to register either your specific email address or your institution as a local law enforcement agency."
         case .unknown:
             return "An error occurred while searching for your account. Please try again later."
         }

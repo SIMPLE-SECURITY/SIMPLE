@@ -45,20 +45,24 @@ struct OSReport: Identifiable, Codable, Equatable {
     let updaterUsername: String
     let updaterEmail: String
     let isAnonymous: Bool
+    let showToPolicesOnly: Bool
     let geohash: String
     let locationString: String
     var status: OSReportStatus
     
-    var reportedByDescription: String {
-        return isAnonymous ? "Anonymous" : ownerUsername
-    }
-    var reportedByDescriptionEmail: String {
-        var anonymousEmail = ownerEmail
-        if let index = ownerEmail.index(of: "@") {
-            let domain = String(ownerEmail[index...])
-            anonymousEmail = "*****" + String(domain) // redact specifics, but identify organization
-        }
-        return isAnonymous ? anonymousEmail : ownerEmail
+//    var reportedByDescription: String {
+//        return isAnonymous ? "Anonymous" : ownerUsername
+//    }
+//    var reportedByDescriptionEmail: String {
+//        var anonymousEmail = ownerEmail
+//        if let index = ownerEmail.index(of: "@") {
+//            let domain = String(ownerEmail[index...])
+//            anonymousEmail = "*****" + String(domain) // redact specifics, but identify organization
+//        }
+//        return isAnonymous ? anonymousEmail : ownerEmail
+//    }
+    var showToPolicesOnlyDescription: String {
+        return showToPolicesOnly ? "Polices Only" : "Public"
     }
 }
 

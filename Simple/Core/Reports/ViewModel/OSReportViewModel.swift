@@ -77,8 +77,9 @@ class OSReportViewModel: NSObject, ObservableObject {
 
     }
     
-    func uploadReport(type: OSReportType, description: String, isAnonymous: Bool, policeReportAlert: Bool) async throws {
+    func uploadReport(type: OSReportType, description: String, isAnonymous: Bool, policeIssuesReportAsAlert: Bool, showToPolicesOnly: Bool) async throws {
         guard let userLocation = userLocation else { return }
+        guard let fullname = UserDefaults.standard.value(forKey: "fullname") as? String else { return }
         var userIsCloseToLocalEnforcement = false
         for location in policesLocation {
             let eachPolicesLocation = CLLocationCoordinate2D(latitude: location[0], longitude: location[1])
@@ -88,10 +89,12 @@ class OSReportViewModel: NSObject, ObservableObject {
                 break
             }
         }
-        guard userIsCloseToLocalEnforcement else {
-            self.showErrorAlert = true
-            self.showLocalEnforcementDistanceAlert = true
-            return
+        if (!fullname.contains("👮‍♂️")) { // polices have no distance restriction (for emergency or cooperation b/t polices)
+            guard userIsCloseToLocalEnforcement else {
+                self.showErrorAlert = true
+                self.showLocalEnforcementDistanceAlert = true
+                return
+            }
         }
         guard isEligibleToCreateReport else {
             self.showErrorAlert = true
@@ -111,12 +114,23 @@ class OSReportViewModel: NSObject, ObservableObject {
         let geohash = GFUtils.geoHash(forLocation: userLocation)
         let uploadTime = Timestamp()
         let ref = Firestore.firestore().collection("reports").document()
-        guard let fullname = UserDefaults.standard.value(forKey: "fullname") as? String else { return }
         guard let email = UserDefaults.standard.value(forKey: "email") as? String else { return }
         
         var status: OSReportStatus = .unconfirmed
         if (fullname.contains("👮‍♂️")) {
-            status = policeReportAlert ? .confirmed : .resolved
+            status = policeIssuesReportAsAlert ? .confirmed : .resolved
+        }
+        
+        var reportedByDescription: String {
+            return isAnonymous ? "Anonymous" : fullname
+        }
+        var reportedByDescriptionEmail: String {
+            var anonymousEmail = email
+            if let index = email.index(of: "@") {
+                let domain = String(email[index...])
+                anonymousEmail = "*****" + String(domain) // redact specifics, but identify organization
+            }
+            return isAnonymous ? anonymousEmail : email
         }
         
         let report = OSReport(
@@ -125,13 +139,14 @@ class OSReportViewModel: NSObject, ObservableObject {
             reportType: type,
             description: description,
             ownerUid: uid,
-            ownerUsername: fullname,
-            ownerEmail: email,
+            ownerUsername: reportedByDescription,
+            ownerEmail: reportedByDescriptionEmail,
             timestamp: uploadTime,
             lastUpdated: uploadTime,
-            updaterUsername: fullname,
-            updaterEmail: email,
+            updaterUsername: reportedByDescription,
+            updaterEmail: reportedByDescriptionEmail, // updater == reporter when report is created, so anonymity should be checked
             isAnonymous: isAnonymous,
+            showToPolicesOnly: showToPolicesOnly,
             geohash: geohash,
             locationString: addressString,
             status: status
@@ -153,7 +168,8 @@ class OSReportViewModel: NSObject, ObservableObject {
             "status": OSReportStatus.resolved.rawValue,
             "lastUpdated": Timestamp(),
             "updaterUsername": name,
-            "updaterEmail": email
+            "updaterEmail": email,
+            "isAnonymous": false // anonymity is removed once report is updated
         ])
         
         didCompleteReportUpdate = true 
@@ -164,7 +180,8 @@ class OSReportViewModel: NSObject, ObservableObject {
             "status": OSReportStatus.confirmed.rawValue,
             "lastUpdated": Timestamp(),
             "updaterUsername": name,
-            "updaterEmail": email
+            "updaterEmail": email,
+            "isAnonymous": false
         ])
         
         didCompleteReportUpdate = true
@@ -175,7 +192,8 @@ class OSReportViewModel: NSObject, ObservableObject {
             "status": OSReportStatus.removed.rawValue,
             "lastUpdated": Timestamp(),
             "updaterUsername": name,
-            "updaterEmail": email
+            "updaterEmail": email,
+            "isAnonymous": false
         ])
         
         didCompleteReportUpdate = true

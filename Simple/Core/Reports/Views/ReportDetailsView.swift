@@ -34,6 +34,11 @@ struct ReportDetailsView: View {
 //                .padding(.leading)
 //                .padding(.bottom, 8)
             
+            let userName = authViewModel.currentUser?.fullname ?? "N/A"
+            let userIsPolice = userName.contains("👮‍♂️")
+            let updaterName = report.updaterUsername
+            let reportInvolvesPolice = updaterName.contains("👮‍♂️") // police-affiliated reports can only be edited by polices
+            
             List {
                 Section {
                     ReportDetailRowView(model: .init(title: "Location", description: report.locationString))
@@ -50,18 +55,17 @@ struct ReportDetailsView: View {
                     
                     ReportDetailRowView(model: .init(title: "Updater Email", description: report.updaterEmail))
                                         
-                    ReportDetailRowView(model: .init(title: "Reported By", description: report.reportedByDescription))
+                    ReportDetailRowView(model: .init(title: "Reported By", description: report.ownerUsername))
                     
-                    ReportDetailRowView(model: .init(title: "Reporter Email", description: report.reportedByDescriptionEmail))
+                    ReportDetailRowView(model: .init(title: "Reporter Email", description: report.ownerEmail))
+                    
+                    if (userIsPolice) {
+                        ReportDetailRowView(model: .init(title: "Who can See This Report", description: report.showToPolicesOnlyDescription))
+                    }
                 } header: {
                     Text("Details")
                 }
             }
-            
-            let userName = authViewModel.currentUser?.fullname ?? "N/A"
-            let userIsPolice = userName.contains("👮‍♂️")
-            let updaterName = report.updaterUsername
-            let reportInvolvesPolice = updaterName.contains("👮‍♂️") // police-affiliated reports can only be edited by polices
             
             if viewModel.isEligibleToUpdateReport(self.report) {
                 HStack(spacing: 12) {
@@ -220,6 +224,7 @@ struct ReportDetailsView_Previews: PreviewProvider {
             updaterUsername: "Charles Shin",
             updaterEmail: "cshin12@jhu.edu",
             isAnonymous: true,
+            showToPolicesOnly: false,
             geohash: "9q9hrh5sdd",
             locationString: "1 Hacker Way, Cupertino CA",
             status: .confirmed

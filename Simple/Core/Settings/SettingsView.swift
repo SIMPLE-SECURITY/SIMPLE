@@ -100,39 +100,24 @@ struct SettingsView: View {
                     }
                 }
                 
-                Section("Police") {
-                    HStack {
-                        Button {
-                            if let url = URL(string: "mailto:charlesshin@simple-secure.org") {
-                                openURL(url)
+                if let user = viewModel.currentUser {
+                    if (user.fullname).contains("👮‍♂️") {
+                        Section("Police") {
+                            HStack {
+                                Button {
+                                    if let url = URL(string: "mailto:charlesshin@simple-secure.org") {
+                                        openURL(url)
+                                    }
+                                }
+                                label: {
+                                    SettingsRowView(imageName: "envelope.badge.shield.half.filled.fill",
+                                                    title: "Request Support",
+                                                    tintColor: Color(.systemIndigo))
+                                }
                             }
-                        }
-                        label: {
-                            SettingsRowView(imageName: "envelope.badge.shield.half.filled.fill",
-                                            title: "Request Support",
-                                            tintColor: Color(.systemIndigo))
                         }
                     }
                 }
-                
-//                if let user = viewModel.currentUser {
-//                    if (user.fullname).contains("👮‍♂️") {
-//                        Section("Police") {
-//                            HStack {
-//                                Button {
-//                                    if let url = URL(string: "mailto:charlesshin@simple-secure.org") {
-//                                        openURL(url)
-//                                    }
-//                                }
-//                                label: {
-//                                    SettingsRowView(imageName: "envelope.badge.shield.half.filled.fill",
-//                                                    title: "Request Support",
-//                                                    tintColor: Color(.systemIndigo))
-//                                }
-//                            }
-//                        }
-//                    }
-//                }
                 
                 Section("Developers") {
                     HStack {

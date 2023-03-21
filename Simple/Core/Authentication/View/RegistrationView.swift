@@ -7,11 +7,26 @@
 
 import SwiftUI
 
+struct iOSCheckboxToggleStyle: ToggleStyle {
+    func makeBody(configuration: Configuration) -> some View {
+        Button(action: {
+            configuration.isOn.toggle()
+        }, label: {
+            HStack {
+                Image(systemName: configuration.isOn ? "checkmark.square" : "square")
+                configuration.label
+            }
+            .frame(maxWidth: 500, alignment: .trailing)
+        })
+    }
+}
+
 struct RegistrationView: View {
     @Environment(\.colorScheme) var colorScheme
     @State private var fullname = ""
     @State private var email = ""
     @State private var password = ""
+    @State private var registerAsPolice = false
     @Environment(\.dismiss) private var dismiss
     @EnvironmentObject var viewModel: AuthViewModel
     
@@ -39,12 +54,21 @@ struct RegistrationView: View {
                 .autocapitalization(.none)
                 .frame(maxWidth: 500)
                 
-                OSInputField(text: $password,
-                             title: "Create Password",
-                             placeholder: "Enter your password",
-                             isSecureField: false)
-                .autocapitalization(.none)
-                .frame(maxWidth: 500)
+                VStack(spacing: 10) {
+                    OSInputField(text: $password,
+                                 title: "Create Password",
+                                 placeholder: "Enter your password",
+                                 isSecureField: false)
+                    .autocapitalization(.none)
+                    .frame(maxWidth: 500)
+                    
+                    Toggle(isOn: $registerAsPolice) {
+                        Text("Register as Police")
+                            .font(.system(size: 13, weight: .semibold))
+                            .foregroundColor(.blue)
+                    }
+                    .toggleStyle(iOSCheckboxToggleStyle())
+                }
             }
             .padding(.horizontal)
             
@@ -54,7 +78,8 @@ struct RegistrationView: View {
                         try await viewModel.registerUser(
                             withEmail: email.trimmingCharacters(in: .whitespacesAndNewlines),
                             password: password,
-                            fullname: fullname.trimmingCharacters(in: .whitespacesAndNewlines)
+                            fullname: fullname.trimmingCharacters(in: .whitespacesAndNewlines),
+                            isPolice: registerAsPolice
                         )
                     }
                 } label: {

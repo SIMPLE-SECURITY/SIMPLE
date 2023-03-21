@@ -16,6 +16,8 @@ struct CreateReportView: View {
     @State private var showLocationSearch = false
     @State private var showInfo = false
     @State private var policeShowInfo = false
+    @State private var onlyPolicesCanSeeReport = false
+    @State private var onlyPolicesCanSeeReportShowInfo = false
     @StateObject private var viewModel = OSReportViewModel()
     @EnvironmentObject var authViewModel: AuthViewModel
     @Environment(\.dismiss) var dismiss
@@ -115,11 +117,31 @@ struct CreateReportView: View {
                             .toggleStyle(CheckmarkToggleStyle())
                             .alert(isPresented: $policeShowInfo) {
                                 Alert(
-                                    title: Text("Report Status"),
-                                    message: Text("Police reports can exist in two states: resolved or alerted. Resolved reports are typically used for general notifications, whereas alerted reports are reserved for emergency situations."),
+                                    title: Text("Resolved or Alert"),
+                                    message: Text("Police reports can be in one of two states: resolved or alerted. Resolved reports are typically used for general notifications, whereas alerted reports are reserved for emergency situations."),
                                     dismissButton: .default(Text("OK"))
                                 )
                             }
+                            
+                            Toggle(isOn: $onlyPolicesCanSeeReport) {
+                                HStack {
+                                    Text("Show to Polices Only")
+                                    Button(action: {
+                                        self.onlyPolicesCanSeeReportShowInfo.toggle()
+                                    }) {
+                                        Image(systemName: "info.circle")
+                                            .foregroundColor(Color(.systemRed))
+                                    }
+                                }
+                            }
+                            .alert(isPresented: $onlyPolicesCanSeeReportShowInfo) {
+                                Alert(
+                                    title: Text("Show to Polices Only"),
+                                    message: Text("Police can share reports only with other police, or they can choose to share them with the public instantly."),
+                                    dismissButton: .default(Text("OK"))
+                                )
+                            }
+                            .tint(Color(.systemRed))
                         } else {
                             Toggle(isOn: $shouldRemainAnonymous) {
                                 HStack {
@@ -133,7 +155,7 @@ struct CreateReportView: View {
                             }
                             .alert(isPresented: $showInfo) {
                                 Alert(
-                                    title: Text("Anonymous Reports"),
+                                    title: Text("Remain Anonymous"),
                                     message: Text("Anonymous reports are first shared only with the police for verification purposes. Non-anonymous reports, on the other hand, are immediately broadcast to those in your vicinity."),
                                     dismissButton: .default(Text("OK"))
                                 )
@@ -148,7 +170,8 @@ struct CreateReportView: View {
                             type: OSReportType(rawValue: selectedReportType) ?? .medicalEmergency,
                             description: description,
                             isAnonymous: shouldRemainAnonymous,
-                            policeReportAlert: shouldBeAlerted
+                            policeIssuesReportAsAlert: shouldBeAlerted,
+                            showToPolicesOnly: onlyPolicesCanSeeReport
                         )
                     }
                 } label: {

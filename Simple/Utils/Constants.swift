@@ -59,6 +59,7 @@ let MOCK_REPORTS: [OSReport] = [
         updaterUsername: "Charles Shin",
         updaterEmail: "cshin12@jhu.edu",
         isAnonymous: true,
+        showToPolicesOnly: false,
         geohash: "9q9hrh5sdd",
         locationString: "1 Hacker Way, Cupertino CA",
         status: .unconfirmed
@@ -76,6 +77,7 @@ let MOCK_REPORTS: [OSReport] = [
         updaterUsername: "Charles Shin",
         updaterEmail: "cshin12@jhu.edu",
         isAnonymous: true,
+        showToPolicesOnly: true,
         geohash: "9q9hrh5sdd",
         locationString: "1 Hacker Way, Cupertino CA",
         status: .unconfirmed
@@ -93,6 +95,7 @@ let MOCK_REPORTS: [OSReport] = [
         updaterUsername: "Charles Shin",
         updaterEmail: "cshin12@jhu.edu",
         isAnonymous: true,
+        showToPolicesOnly: false,
         geohash: "9q9hrh5sdd",
         locationString: "1 Hacker Way, Cupertino CA",
         status: .unconfirmed
@@ -110,6 +113,7 @@ let MOCK_REPORTS: [OSReport] = [
         updaterUsername: "Charles Shin",
         updaterEmail: "cshin12@jhu.edu",
         isAnonymous: true,
+        showToPolicesOnly: false,
         geohash: "9q9hrh5sdd",
         locationString: "1 Hacker Way, Cupertino CA",
         status: .unconfirmed

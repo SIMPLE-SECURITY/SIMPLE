@@ -81,7 +81,7 @@ class AuthViewModel: ObservableObject {
     }
     
     @MainActor
-    func registerUser(withEmail email: String, password: String, fullname: String) async throws {
+    func registerUser(withEmail email: String, password: String, fullname: String, isPolice: Bool) async throws {
         guard let location = locationManager.userLocation else { return }
         guard fullname.notContainsEmoji else {
             self.showAuthAlert = true
@@ -92,6 +92,13 @@ class AuthViewModel: ObservableObject {
             self.showAuthAlert = true
             self.authError = AuthenticationError(localizedDescription: "email address is not in registered academia")
             return
+        }
+        if (isPolice == true) {
+            guard (polices.contains(email) || endsWithAny(email, policeEmailDomains)) else {
+                self.showAuthAlert = true
+                self.authError = AuthenticationError(localizedDescription: "email address is not registered as a part of the local law enforcement")
+                return
+            }
         }
         do {
             let result = try await Auth.auth().createUser(withEmail: email, password: password)
