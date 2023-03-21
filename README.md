@@ -1,7 +1,5 @@
 # SIMPLE  
 Official repository for SIMPLE, an open-source initiative to ensure privacy within public safety.  
-Supporting Baltimore Police (@baltimorepolice.org) only as police department right now.  
-To add your local law enforcement, please email charlesshin@simple-secure.org.  
   
 Certain information are removed from this repository to prevent misuse.   
 All files necessary for app functionality are in this repository.  
@@ -11,6 +9,49 @@ For more information about SIMPLE, please visit our website at https://www.simpl
 Founded and developed by Charles Shin (tlsgusdn1107).  
 
 Version: 1.0  
-Build: 18
+Build: 19
+
+The following email addresses are catalogued as part of local law enforcement:  
+  
+    "@detroitmi.gov", // Detroit, Michigan
+    "@detroitpoa.com",
+    "@ci.monroe.la.us", // Monroe, Louisiana
+    "@yourmpd.com",
+    "@memphistn.gov", // Memphis, Tennessee
+    "@memphispolice.org",
+    "springfieldmo.gov", // Springfield, Missouri
+    "@stlouiscountymo.gov", // St Louis, Missouri
+    "@stlouiscountypolice.com",
+    "@cabq.gov", // Albuquerque, New Mexico
+    "@nmapoa.com",
+    "@anchorageak.gov", // Anchorage, Alaska
+    "@alaskacops.org",
+    "@rockfordil.gov", // Rockford, Illinois
+    "@baltimorecity.gov", // Baltimore, Maryland
+    "@baltimorepolice.org",
+    "@baltimorecountymd.gov",
+    "@littlerock.gov", // Little Rock, Arkansas
+    "@nlrpolice.org",
+    "@stocktonca.gov", // Stockton, California
+    "@milwaukee.gov", // Milwaukee, Wisconsin
+    "@clevelandohio.gov", // Cleveland, Ohio
+    "@oaklandca.gov", // Oakland, California
+    "@saginaw-mi.com", // Saginaw, Michigan
+    "@mobilepd.org", // Mobile, Alabama
+    "@birminghamal.gov", // Birmingham, Alabama
+    "@nola.gov", // New Orleans, Louisiana
+    "@shreveportla.gov", // Shreveport, Louisiana
+    "@brla.gov", // Baton Rouge, Louisiana
+    "@kcpd.org", // Kansas City, Missouri
+    "@phila.gov", // Philadelphia, Pennsylvania
+    "@bouldercolorado.gov", // Boulder, Colorado
+    "@sjpd.org", // San Jose, California
+    "@sanjoseca.gov",
+    "@isp.IN.gov", // Indianapolis, Indiana
+    "@atlantaga.gov", // Atlanta, Georgia
+    "@coloradosprings.gov", // Colorado Springs, Colorado
+    "@pvestates.org" // Palos Verdes, California
+
+To add your local law enforcement, please email charlesshin@simple-secure.org.  
 
 Copyright © 2022-2023 SIMPLE. All rights reserved.

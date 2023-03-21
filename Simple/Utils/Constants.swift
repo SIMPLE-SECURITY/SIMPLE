@@ -9,25 +9,95 @@ import Firebase
 
 let polices =
 
-[ // MUST LABEL WITH CORRESPONDING ORDERS TO "policesLocation" VARIABLE
+// emails for special purposes (police email domains are listed in "policeEmailDomains" variable)
+
+[
     "ashin2022@gmail.com", // personal email. for developer's administrative use
     "jjacks48@jhu.edu", // Jarron L Jackson, Baltimore Police Department
     "rrule@chadwickschool.org" // Bob Rule, Chadwick School (Palos Verdes)
 ]
 
-
-let policeEmailDomains = // all officers with these email domains are regarded as police officers
-
-[
-    "@baltimorepolice.org"
-]
-
 let policesLocation =
 
 [
+    [42.33618904978958, -83.0570091573357], // Detroit Police Department
+    [32.50247796355152, -92.1105783819071], // Monroe Police Department
+    [35.16310836206498, -90.04771711732344], // Memphis Police Department
+    [37.21897381675602, -93.29065839146313], // Springfield Police Department
+    [38.63716645728471, -90.20722363915661], // Metropolitan Police Department - City of St. Louis
+    [35.10248538416908, -106.64785453928043], // Albuquerque Police Department
+    [61.2217053565378, -149.89602199592466], // Anchorage Police Department
+    [42.282260503625665, -89.10439505417109], // Rockford Police Department District
     [39.29021636231264, -76.60750005886018], // Baltimore City Police Headquarters
-    [33.779345256556155, -118.36006674602402] // Chadwick School (Palos Verdes)
+    [34.78490906008009, -92.2701688161913], // North Little Rock Police Department
+    [37.951411021197465, -121.29031185979407], // Stockton Police Department
+    [43.0568416018988, -87.91689459405991], // Milwaukee Police Department District 1 & Administration
+    [41.507900873123944, -81.69658644518985], // Cleveland Police Department
+    [37.801261320339194, -122.27498769984022], // Oakland Police Department
+    [43.43370352918128, -83.93519827919111], // Saginaw Police Department
+    [30.679351766349487, -88.09850032691755], // Mobile Police Department
+    [33.519774710057455, -86.81062306794455], // Birmingham Police Headquarters
+    [29.96413452364635, -90.09234581570821], // New Orleans Police Department
+    [32.50611508150963, -93.75637010795072], // Shreveport Police Department
+    [30.452000337747744, -91.08953385188812], // Baton Rouge Police Department
+    [39.11547550615816, -94.57150996216797], // The Kansas City Missouri Police Department
+    [39.96167113635259, -75.151339412732], // Philadelphia Police Department Headquarters
+    [40.01906493658933, -105.25009911459915], // Boulder Police Department
+    [37.352108542620826, -121.90600249899872], // San Jose Police Department
+    [39.78166032373341, -86.15575728139848], // Indianapolis Metropolitan Police Department - Headquarters
+    [33.70796590587893, -84.39726237311854], // Atlanta Police Department
+    [38.82931509836416, -104.82367131243059], // Colorado Springs Police Department
+    [33.801474790618656, -118.39193545336349] // Palos Verdes Estates Police
 ] // block reporting feature if too far from any local enforcement agencies (App Store protocol)
+
+let policeEmailDomains =
+
+// all officers with these email domains are regarded as police officers
+// listed email domains from most dangerous cities + worst cities with mass shootings in the US
+// https://theboutiqueadventurer.com/most-dangerous-cities-in-the-united-states/
+// https://www.forbes.com/sites/laurabegleybloom/2023/01/31/most-dangerous-cities-in-the-us-crime-in-america/?sh=6ae421674b25
+// search more email domains in Google: "neverbounce [city name] police department" (e.g. "neverbounce detroit police department")
+
+[
+    "@detroitmi.gov", // Detroit, Michigan
+    "@detroitpoa.com",
+    "@ci.monroe.la.us", // Monroe, Louisiana
+    "@yourmpd.com",
+    "@memphistn.gov", // Memphis, Tennessee
+    "@memphispolice.org",
+    "springfieldmo.gov", // Springfield, Missouri
+    "@stlouiscountymo.gov", // St Louis, Missouri
+    "@stlouiscountypolice.com",
+    "@cabq.gov", // Albuquerque, New Mexico
+    "@nmapoa.com",
+    "@anchorageak.gov", // Anchorage, Alaska
+    "@alaskacops.org",
+    "@rockfordil.gov", // Rockford, Illinois
+    "@baltimorecity.gov", // Baltimore, Maryland
+    "@baltimorepolice.org",
+    "@baltimorecountymd.gov",
+    "@littlerock.gov", // Little Rock, Arkansas
+    "@nlrpolice.org",
+    "@stocktonca.gov", // Stockton, California
+    "@milwaukee.gov", // Milwaukee, Wisconsin
+    "@clevelandohio.gov", // Cleveland, Ohio
+    "@oaklandca.gov", // Oakland, California
+    "@saginaw-mi.com", // Saginaw, Michigan
+    "@mobilepd.org", // Mobile, Alabama
+    "@birminghamal.gov", // Birmingham, Alabama
+    "@nola.gov", // New Orleans, Louisiana
+    "@shreveportla.gov", // Shreveport, Louisiana
+    "@brla.gov", // Baton Rouge, Louisiana
+    "@kcpd.org", // Kansas City, Missouri
+    "@phila.gov", // Philadelphia, Pennsylvania
+    "@bouldercolorado.gov", // Boulder, Colorado
+    "@sjpd.org", // San Jose, California
+    "@sanjoseca.gov",
+    "@isp.IN.gov", // Indianapolis, Indiana
+    "@atlantaga.gov", // Atlanta, Georgia
+    "@coloradosprings.gov", // Colorado Springs, Colorado
+    "@pvestates.org" // Palos Verdes, California
+]
 
 // US universities are only catalogued so far (+ Chadwick community, JHMI)
 // Both the police departments AND university domains (public safety officials) should be valid for police accounts
