@@ -1,5 +1,5 @@
 # SIMPLE  
-Official repository for SIMPLE, an open-source initiative to ensure privacy within public safety.  
+Official repository for SIMPLE, the first iOS open-source initiative to ensure privacy within public safety.  
   
 Certain information are removed from this repository to prevent misuse.   
 All files necessary for app functionality are in this repository.  
