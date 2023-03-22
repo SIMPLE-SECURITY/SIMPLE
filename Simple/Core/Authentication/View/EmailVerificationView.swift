@@ -87,7 +87,7 @@ struct EmailVerificationView: View {
             
         }
         .alert(isPresented: $viewModel.showAuthAlert, content: {
-            Alert(title: Text("Error"), message: Text(viewModel.authError?.description ?? AuthenticationError.unknown.description))
+            Alert(title: Text(viewModel.authError?.title ?? AuthenticationError.unknown.title), message: Text(viewModel.authError?.description ?? AuthenticationError.unknown.description))
         })
         
     }

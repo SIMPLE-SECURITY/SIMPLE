@@ -11,10 +11,12 @@ import SwiftUI
 struct OSMapView: UIViewRepresentable {
     let mapView = MKMapView()
     let locationManager = LocationManager.shared
+    @EnvironmentObject var authViewModel: AuthViewModel
     @EnvironmentObject var viewModel: OSMapViewModel
     @Binding var selectedReport: OSReport?
     
     func makeUIView(context: Context) -> some UIView {
+        mapView.tintColor = authViewModel.userIsPolice(authViewModel.userSession?.email ?? "N/A") ? .systemRed : .systemBlue
         mapView.showsUserLocation = true
         mapView.userTrackingMode = .follow
         mapView.delegate = context.coordinator

@@ -34,7 +34,7 @@ struct ResetPasswordView: View {
             .frame(maxWidth: 500)
                         
             Button {
-                viewModel.sendResetPasswordLink(toEmail: email)
+                viewModel.sendResetPasswordLink(toEmail: email.trimmingCharacters(in: .whitespacesAndNewlines))
                 dismiss()
             } label: {
                 HStack {

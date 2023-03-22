@@ -15,7 +15,9 @@ struct ContentView: View {
     
     var body: some View {
         let userName = authViewModel.currentUser?.fullname ?? "N/A"
-        let reportIcon = userName.contains("👮‍♂️") ? "airplayaudio.badge.exclamationmark" : "exclamationmark.bubble.fill"
+        let userIsPolice = userName.contains("👮‍♂️")
+        let reportIcon = userIsPolice ? "airplayaudio.badge.exclamationmark" : "exclamationmark.bubble.fill"
+        
         ZStack(alignment: .bottomTrailing) {
             OSMapView(selectedReport: $selectedReport)
                 .ignoresSafeArea()

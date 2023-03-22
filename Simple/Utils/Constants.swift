@@ -9,6 +9,15 @@ import Firebase
 import UIKit
 import Foundation
 
+// async call needs to be implemented later
+// perhaps not because this is a global variable initializer, so variables will be initialized b4 any other code is executed
+
+//func fetchArray<T: Decodable>(ofType type: T.Type, from urlString: String) async throws -> [T] {
+//    let url = URL(string: urlString)!
+//    let (data, _) = try await URLSession.shared.data(from: url)
+//    return try JSONDecoder().decode([T].self, from: data)
+//}
+
 // emails specially allowed to have police account (police email domains are listed in "policesEmailDomains" variable)
 let policesData = try! Data(contentsOf: URL(string: "https://raw.githubusercontent.com/tlsgusdn1107/SIMPLE/main/Simple/Utils/polices.json")!)
 let polices = try! JSONDecoder().decode([String].self, from: policesData)

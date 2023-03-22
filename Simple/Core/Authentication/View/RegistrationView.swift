@@ -13,8 +13,8 @@ struct iOSCheckboxToggleStyle: ToggleStyle {
             configuration.isOn.toggle()
         }, label: {
             HStack {
-                Image(systemName: configuration.isOn ? "checkmark.square" : "square")
                 configuration.label
+                Image(systemName: configuration.isOn ? "checkmark.square" : "square")
             }
             .frame(maxWidth: 500, alignment: .trailing)
         })
@@ -123,7 +123,7 @@ struct RegistrationView: View {
             }
         }
         .alert(isPresented: $viewModel.showAuthAlert, content: {
-            Alert(title: Text("Error"), message: Text(viewModel.authError?.description ?? AuthenticationError.unknown.description))
+            Alert(title: Text(viewModel.authError?.title ?? AuthenticationError.unknown.title), message: Text(viewModel.authError?.description ?? AuthenticationError.unknown.description))
         })
         .onTapGesture {
             hideKeyboard()

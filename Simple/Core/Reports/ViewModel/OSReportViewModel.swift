@@ -54,16 +54,17 @@ class OSReportViewModel: NSObject, ObservableObject {
         guard let userLocation = userLocation?.toCLLocation() else { return false }
         let reportLocation = report.geopoint.toCLLocation()
         let distance = userLocation.distance(from: reportLocation)
-
         guard let fullname = UserDefaults.standard.value(forKey: "fullname") as? String else { return true }
-        minimumDistanceToUpdateReportInMeters = fullname.contains("👮‍♂️") ? 300 : 100 // if police, then they can update within 300 meters (to be flexible but also to prevent lazy updates)
+        let userIsPolice = fullname.contains("👮‍♂️")
+        minimumDistanceToUpdateReportInMeters = userIsPolice ? 300 : 100 // if police, then they can update within 300 meters (to be flexible but also to prevent lazy updates)
         return distance <= minimumDistanceToUpdateReportInMeters
     }
     
     var isEligibleToUpdateReport: Bool {
         guard let lastUploadDate = UserDefaults.standard.value(forKey: "lastUploadTime") as? Date else { return true }
         guard let fullname = UserDefaults.standard.value(forKey: "fullname") as? String else { return true }
-        timeLimitForUpdateInSeconds = fullname.contains("👮‍♂️") ? 5 : 3 * 60 // if police, then 5 seconds
+        let userIsPolice = fullname.contains("👮‍♂️")
+        timeLimitForUpdateInSeconds = userIsPolice ? 5 : 3 // if police, then 5 seconds
         let timeSinceLastUploadInSeconds = Date().timeIntervalSince(lastUploadDate)
         return timeLimitForUpdateInSeconds < Double(timeSinceLastUploadInSeconds)
     }
@@ -71,16 +72,18 @@ class OSReportViewModel: NSObject, ObservableObject {
     var isEligibleToCreateReport: Bool {
         guard let lastUploadDate = UserDefaults.standard.value(forKey: "lastUploadTime") as? Date else { return true }
         guard let fullname = UserDefaults.standard.value(forKey: "fullname") as? String else { return true }
-        timeLimitInSeconds = fullname.contains("👮‍♂️") ? 10 : 20 * 60 // if police, then 10 seconds
+        let userIsPolice = fullname.contains("👮‍♂️")
+        timeLimitInSeconds = userIsPolice ? 10 : 5 // if police, then 10 seconds
         let timeSinceLastUploadInSeconds = Date().timeIntervalSince(lastUploadDate)
         return timeLimitInSeconds < Double(timeSinceLastUploadInSeconds)
-
     }
     
     func uploadReport(type: OSReportType, description: String, isAnonymous: Bool, policeIssuesReportAsAlert: Bool, showToPolicesOnly: Bool) async throws {
         guard let userLocation = userLocation else { return }
         guard let fullname = UserDefaults.standard.value(forKey: "fullname") as? String else { return }
+        let userIsPolice = fullname.contains("👮‍♂️")
         var userIsCloseToLocalEnforcement = false
+        
         for location in policesLocation {
             let eachPolicesLocation = CLLocationCoordinate2D(latitude: location[0], longitude: location[1])
             let distanceFromUserLocation = userLocation.toCLLocation().distance(from: eachPolicesLocation.toCLLocation())
@@ -89,7 +92,7 @@ class OSReportViewModel: NSObject, ObservableObject {
                 break
             }
         }
-        if (!fullname.contains("👮‍♂️")) { // polices have no distance restriction (for emergency or cooperation b/t polices)
+        if !userIsPolice { // polices have no distance restriction (for emergency or cooperation b/t polices)
             guard userIsCloseToLocalEnforcement else {
                 self.showErrorAlert = true
                 self.showLocalEnforcementDistanceAlert = true
@@ -117,7 +120,7 @@ class OSReportViewModel: NSObject, ObservableObject {
         guard let email = UserDefaults.standard.value(forKey: "email") as? String else { return }
         
         var status: OSReportStatus = .unconfirmed
-        if (fullname.contains("👮‍♂️")) {
+        if userIsPolice {
             status = policeIssuesReportAsAlert ? .confirmed : .resolved
         }
         
@@ -284,7 +287,8 @@ class OSReportViewModel: NSObject, ObservableObject {
             let coordinate = item.placemark.coordinate
             let distanceFromUserLocation = userLocation.toCLLocation().distance(from: coordinate.toCLLocation())
             guard let fullname = UserDefaults.standard.value(forKey: "fullname") as? String else { return }
-            minimumDistanceToUploadReportInMeters = fullname.contains("👮‍♂️") ? 300 : 100 // if police, then they can upload within 300 meters
+            let userIsPolice = fullname.contains("👮‍♂️")
+            minimumDistanceToUploadReportInMeters = userIsPolice ? 300 : 100 // if police, then they can upload within 300 meters
 
             guard distanceFromUserLocation <= minimumDistanceToUploadReportInMeters else {
                 self.showErrorAlert = true

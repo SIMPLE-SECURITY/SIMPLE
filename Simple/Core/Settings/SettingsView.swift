@@ -14,13 +14,15 @@ struct SettingsView: View {
     var body: some View {
         VStack(alignment: .leading) {
             if let user = viewModel.currentUser {
+                let userIsPolice = (user.fullname).contains("👮‍♂️")
+                
                 HStack (spacing: 15) {
-                    Text((user.fullname).contains("👮‍♂️") ? "Police" : user.initials)
-                        .font((user.fullname).contains("👮‍♂️") ? .title2 : .title)
+                    Text(userIsPolice ? "Police" : user.initials)
+                        .font(userIsPolice ? .title2 : .title)
                         .fontWeight(.semibold)
                         .foregroundColor(.white)
                         .frame(width: 80, height: 80)
-                        .background(Color((user.fullname).contains("👮‍♂️") ? .systemGray : .systemGray3))
+                        .background(Color(userIsPolice ? .systemGray : .systemGray3))
                         .clipShape(Circle())
                     
                     VStack(alignment: .leading, spacing: 4) {
@@ -99,20 +101,18 @@ struct SettingsView: View {
                         }
                     }
                     
-                    if let user = viewModel.currentUser {
-                        if (user.fullname).contains("👮‍♂️") {
-                            Section("Police") {
-                                HStack {
-                                    Button {
-                                        if let url = URL(string: "mailto:charlesshin@simple-secure.org") {
-                                            openURL(url)
-                                        }
+                    if userIsPolice {
+                        Section("Police") {
+                            HStack {
+                                Button {
+                                    if let url = URL(string: "mailto:charlesshin@simple-secure.org") {
+                                        openURL(url)
                                     }
-                                    label: {
-                                        SettingsRowView(imageName: "envelope.badge.shield.half.filled.fill",
-                                                        title: "Request Support",
-                                                        tintColor: Color(.systemIndigo))
-                                    }
+                                }
+                                label: {
+                                    SettingsRowView(imageName: "envelope.badge.shield.half.filled.fill",
+                                                    title: "Request Support",
+                                                    tintColor: Color(.systemIndigo))
                                 }
                             }
                         }
@@ -146,7 +146,7 @@ struct SettingsView: View {
                             }
                         } label: {
                             SettingsRowView(imageName: "arrow.left.arrow.right.circle.fill",
-                                            title: (user.fullname).contains("👮‍♂️") ? "Switch to Basic Account" : "Switch to Police Account",
+                                            title: userIsPolice ? "Switch to Basic Account" : "Switch to Police Account",
                                             tintColor: Color(.systemRed))
                         }
                         
@@ -159,9 +159,7 @@ struct SettingsView: View {
                         }
                         
                         Button {
-                            Task {
-                                try await viewModel.deleteAccount()
-                            }
+                            viewModel.deleteConfirmation()
                         } label: {
                             SettingsRowView(imageName: "xmark.circle.fill",
                                             title: "Delete Account",
@@ -172,36 +170,22 @@ struct SettingsView: View {
             }
         }
         .frame(maxHeight: .infinity)
-        .alert(isPresented: $viewModel.settingAlert) {
-            if $viewModel.changeSuccessful.wrappedValue {
-                if let user = viewModel.currentUser {
-                    return Alert(
-                        title: Text("Change Successful!"),
-                        message: (user.fullname).contains("👮‍♂️") ? Text("Your account has been successfully changed to a police account.") : Text("Your account has been successfully changed to a basic account.")
-                    )
-                }
-            }
-            if $viewModel.changeUnsuccessful.wrappedValue {
+        .alert(isPresented: $viewModel.showSettingAlert, content: {
+            switch viewModel.settingMessage {
+            case .confirmingDelete:
                 return Alert(
-                    title: Text("Change Unsuccessful"),
-                    message: Text("Your email address is not recognized as belonging to local law enforcement. Please contact charlesshin@simple-secure.org if you would like to add your email as eligible for a police account.")
+                    title: Text(SettingMessage.confirmingDelete.title), message: Text(SettingMessage.confirmingDelete.description),
+                    primaryButton: .destructive(Text("Delete")) {
+                        Task {
+                            try await viewModel.deleteAccount()
+                        }
+                    },
+                    secondaryButton: .cancel()
                 )
+            default:
+                return Alert(title: Text(viewModel.settingMessage?.title ?? SettingMessage.unknown.title), message: Text(viewModel.settingMessage?.description ?? SettingMessage.unknown.description))
             }
-            if $viewModel.deleteAlert.wrappedValue {
-                return Alert(
-                    title: Text("Authentication Required"),
-                    message: Text("Deleting your account requires recent authentication. Log in again before retrying it.")
-                )
-            }
-            if $viewModel.signoutAlert.wrappedValue {
-                return Alert(
-                    title: Text("Sign Out Failed"),
-                    message: Text("Sorry, we could not sign you out at this time. Please try again later.")
-                )
-            }
-            return Alert(title: Text("Error"), message:
-                            Text("An error occurred while processing your request. Please try again later."))
-        }
+        })
     }
 }
 

@@ -56,6 +56,7 @@
 		32E5F92A29C9E17500DB1104 /* policesLocation.json in Resources */ = {isa = PBXBuildFile; fileRef = 32E5F92529C9E17400DB1104 /* policesLocation.json */; };
 		32E5F92B29C9E17500DB1104 /* institutionalEmailDomains.json in Resources */ = {isa = PBXBuildFile; fileRef = 32E5F92629C9E17400DB1104 /* institutionalEmailDomains.json */; };
 		32E5F92D29C9E1B700DB1104 /* Constants-Annotation.txt in Resources */ = {isa = PBXBuildFile; fileRef = 32E5F92C29C9E1B700DB1104 /* Constants-Annotation.txt */; };
+		32E5F92F29CAE0F700DB1104 /* SettingMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32E5F92E29CAE0F700DB1104 /* SettingMessage.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -99,6 +100,7 @@
 		32E5F92529C9E17400DB1104 /* policesLocation.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = policesLocation.json; sourceTree = "<group>"; };
 		32E5F92629C9E17400DB1104 /* institutionalEmailDomains.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = institutionalEmailDomains.json; sourceTree = "<group>"; };
 		32E5F92C29C9E1B700DB1104 /* Constants-Annotation.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "Constants-Annotation.txt"; sourceTree = "<group>"; };
+		32E5F92E29CAE0F700DB1104 /* SettingMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingMessage.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -181,6 +183,7 @@
 				2BA127652975B85A00A9E0F5 /* Reports */,
 				2B3E84EB297269B400A0FDD7 /* User.swift */,
 				2BD76200299AF12100312907 /* AuthenticationError.swift */,
+				32E5F92E29CAE0F700DB1104 /* SettingMessage.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -456,6 +459,7 @@
 				2B3E84CF2972350900A0FDD7 /* LocationManager.swift in Sources */,
 				2BA127642975B85400A9E0F5 /* OSLocationReportType.swift in Sources */,
 				2BCBD731299334BE0002ABC6 /* ResetPasswordView.swift in Sources */,
+				32E5F92F29CAE0F700DB1104 /* SettingMessage.swift in Sources */,
 				2B0206A42979B6F1005318E3 /* CLLocationCoordinate2D.swift in Sources */,
 				2BD76201299AF12100312907 /* AuthenticationError.swift in Sources */,
 				2BA1275F297519A100A9E0F5 /* ReportDetailsView.swift in Sources */,
@@ -585,7 +589,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 23;
+				CURRENT_PROJECT_VERSION = 25;
 				DEVELOPMENT_ASSET_PATHS = "";
 				DEVELOPMENT_TEAM = 36F7BW6A5W;
 				ENABLE_PREVIEWS = YES;
@@ -616,7 +620,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 23;
+				CURRENT_PROJECT_VERSION = 25;
 				DEVELOPMENT_ASSET_PATHS = "";
 				DEVELOPMENT_TEAM = 36F7BW6A5W;
 				ENABLE_PREVIEWS = YES;

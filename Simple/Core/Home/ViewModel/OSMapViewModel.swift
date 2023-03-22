@@ -41,7 +41,9 @@ class OSMapViewModel: ObservableObject {
     func fetchReports() {
         guard let userLocation = LocationManager.shared.userLocation else { return }
         guard let fullname = UserDefaults.standard.value(forKey: "fullname") as? String else { return }
-        radius = fullname.contains("👮‍♂️") ? 100 * 1000 : 50 * 1000 // if police, then 2x radius
+        let userIsPolice = fullname.contains("👮‍♂️")
+        
+        radius = userIsPolice ? 100 * 1000 : 50 * 1000 // if police, then 2x radius
         let queryBounds = GFUtils.queryBounds(forLocation: userLocation, withRadius: radius)
                 
         let queries = queryBounds.map { bound -> Query in
@@ -58,7 +60,8 @@ class OSMapViewModel: ObservableObject {
                 for change in changes {
                     if change.type == .added {
                         guard let report = try? change.document.data(as: OSReport.self) else { return }
-                        if !fullname.contains("👮‍♂️") {
+                        
+                        if !userIsPolice {
                             guard (report.isAnonymous == false) else { continue } // if user is not police, non-anonymous reports are only displayed (anonymous reports are sent to polices for review)
                             guard (report.showToPolicesOnly == false) else { continue } // for police-only reports
                         }
@@ -73,9 +76,10 @@ class OSMapViewModel: ObservableObject {
                         
                     } else if change.type == .modified {
                         guard let report = try? change.document.data(as: OSReport.self) else { return }
-                        if !fullname.contains("👮‍♂️") {
-                            guard (report.isAnonymous == false) else { continue }
-                            guard (report.showToPolicesOnly == false) else { continue }
+                        
+                        if !userIsPolice {
+                            guard (report.isAnonymous == false) else { continue } // redundant reasons
+                            guard (report.showToPolicesOnly == false) else { continue } // redundant reasons
                         }
 
                         guard let index = self.reports.firstIndex(where: { $0.id == report.id }) else { return }

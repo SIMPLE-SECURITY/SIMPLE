@@ -26,18 +26,10 @@ struct ReportDetailsView: View {
             .frame(maxWidth: .infinity, alignment: .leading)
             .padding()
             
-//            Spacer()
-//
-//            Text("Details")
-//                .fontWeight(.semibold)
-//                .frame(maxWidth: .infinity, alignment: .leading)
-//                .padding(.leading)
-//                .padding(.bottom, 8)
-            
             let userName = authViewModel.currentUser?.fullname ?? "N/A"
             let userIsPolice = userName.contains("👮‍♂️")
             let updaterName = report.updaterUsername
-            let reportInvolvesPolice = updaterName.contains("👮‍♂️") // police-affiliated reports can only be edited by polices
+            let reportInvolvesPolice = updaterName.contains("👮‍♂️") // police-affiliated reports should only be edited by polices
             
             List {
                 Section {
@@ -74,61 +66,33 @@ struct ReportDetailsView: View {
                             viewModel.updateReportStatus(.resolved, report: report)
                         } label: {
                             Text("RESOLVE")
-                                .fontWeight(.semibold)
-                                .frame(width: (UIScreen.main.bounds.width / 3) - 20, height: 50)
-                                .frame(maxWidth: 218.3)
-                                .background(Color(.systemGreen))
-                                .foregroundColor(.white)
-                                .cornerRadius(10)
+                                .textModifier(type: "Button", split: 3, color: Color(.systemGreen))
                         }
                         
                         Button {
                             viewModel.updateReportStatus(.removed, report: report)
                         } label: {
                             Text("DELETE")
-                                .fontWeight(.semibold)
-                                .frame(width: (UIScreen.main.bounds.width / 3) - 20, height: 50)
-                                .frame(maxWidth: 218.3)
-                                .background(Color(.systemBlue))
-                                .foregroundColor(.white)
-                                .cornerRadius(10)
+                                .textModifier(type: "Button", split: 3, color: Color(.systemBlue))
                         }
                         
                         Button {
                             viewModel.updateReportStatus(.confirmed, report: report)
                         } label: {
                             Text("ALERT")
-                                .fontWeight(.semibold)
-                                .frame(width: (UIScreen.main.bounds.width / 3) - 20, height: 50)
-                                .frame(maxWidth: 218.3)
-                                .background(Color(.systemRed))
-                                .foregroundColor(.white)
-                                .cornerRadius(10)
+                                .textModifier(type: "Button", split: 3, color: Color(.systemRed))
                         }
                     } else {
-                        if (reportInvolvesPolice) {
+                        if reportInvolvesPolice {
                             Text("This report can only be moderated by polices now.")
-                                .font(.subheadline)
-                                .multilineTextAlignment(.center)
-                                .foregroundColor(.gray)
-                                .padding(.horizontal, 24)
-                                .padding(.top, 32)
-                                .padding(.bottom, 32)
+                                .textModifier(type: "Text")
                         } else { // when both sides are not polices
                             if report.status == .confirmed {
                                 Button {
                                     viewModel.updateReportStatus(.resolved, report: report)
                                 } label: {
                                     Text("RESOLVE")
-                                        .fontWeight(.semibold)
-                                        
-                                        .frame(width: UIScreen.main.bounds.width - 40, height: 50)
-                                        .frame(maxWidth: 675)
-        //                                .frame(maxWidth: 600)
-        //                                .frame(height: 44)
-                                        .background(Color(.systemGreen))
-                                        .foregroundColor(.white)
-                                        .cornerRadius(10)
+                                        .textModifier(type: "Button", split: 1, color: Color(.systemGreen))
                                 }
                             }
                             
@@ -137,15 +101,7 @@ struct ReportDetailsView: View {
                                     viewModel.updateReportStatus(.confirmed, report: report)
                                 } label: {
                                     Text("ALERT")
-                                        .fontWeight(.semibold)
-                                        
-                                        .frame(width: UIScreen.main.bounds.width - 40, height: 50)
-                                        .frame(maxWidth: 675)
-        //                                .frame(maxWidth: 600)
-        //                                .frame(height: 44)
-                                        .background(Color(.systemRed))
-                                        .foregroundColor(.white)
-                                        .cornerRadius(10)
+                                        .textModifier(type: "Button", split: 1, color: Color(.systemRed))
                                 }
                             }
                             
@@ -154,39 +110,24 @@ struct ReportDetailsView: View {
                                     viewModel.updateReportStatus(.resolved, report: report)
                                 } label: {
                                     Text("RESOLVE")
-                                        .fontWeight(.semibold)
-                                        .frame(width: (UIScreen.main.bounds.width / 2) - 25, height: 50)
-                                        .frame(maxWidth: 332.5)
-                                        .background(Color(.systemGreen))
-                                        .foregroundColor(.white)
-                                        .cornerRadius(10)
+                                        .textModifier(type: "Button", split: 2, color: Color(.systemGreen))
                                 }
                                 
                                 Button {
                                     viewModel.updateReportStatus(.confirmed, report: report)
                                 } label: {
                                     Text("ALERT")
-                                        .fontWeight(.semibold)
-                                        .frame(width: (UIScreen.main.bounds.width / 2) - 25, height: 50)
-                                        .frame(maxWidth: 332.5)
-                                        .background(Color(.systemRed))
-                                        .foregroundColor(.white)
-                                        .cornerRadius(10)
+                                        .textModifier(type: "Button", split: 2, color: Color(.systemRed))
                                 }
                             }
                         }
                     }
                 }
-                .padding()
+                .padding() // needed to prevent button from skretching full width in iphones
                 .padding(.bottom, 24)
             } else {
                 Text("You are too far away from this incident to provide an update. If it's safe, please move closer to either resolve this issue or confirm the threat.")
-                    .font(.subheadline)
-                    .multilineTextAlignment(.center)
-                    .foregroundColor(.gray)
-                    .padding(.horizontal, 24)
-                    .padding(.top, 32)
-                    .padding(.bottom, 32)
+                    .textModifier(type: "Text")
             }
         }
         .alert(isPresented: $viewModel.showTimeRestrictionForUpdateAlert) {
@@ -206,6 +147,62 @@ struct ReportDetailsView: View {
         .ignoresSafeArea()
         .frame(maxHeight: .infinity)
         .background(Color(.systemGroupedBackground))
+    }
+}
+
+struct TextModifier: ViewModifier {
+    var type: String
+    var split : Int
+    var color: Color
+
+    func body(content: Content) -> some View {
+        switch type {
+        case "Button":
+            switch split {
+            case 3:
+                content
+                    .fontWeight(.semibold)
+                    .frame(width: (UIScreen.main.bounds.width / 3) - 20, height: 50)
+                    .frame(maxWidth: 218.3)
+                    .background(color)
+                    .foregroundColor(.white)
+                    .cornerRadius(10)
+            case 2:
+                content
+                    .fontWeight(.semibold)
+                    .frame(width: (UIScreen.main.bounds.width / 2) - 25, height: 50)
+                    .frame(maxWidth: 332.5)
+                    .background(color)
+                    .foregroundColor(.white)
+                    .cornerRadius(10)
+            case 1:
+                content
+                    .fontWeight(.semibold)
+                    .frame(width: UIScreen.main.bounds.width - 40, height: 50)
+                    .frame(maxWidth: 675)
+                    .background(color)
+                    .foregroundColor(.white)
+                    .cornerRadius(10)
+            default:
+                content
+            }
+        case "Text":
+            content
+                .font(.subheadline)
+                .multilineTextAlignment(.center)
+                .foregroundColor(.gray)
+                .padding(.horizontal, 24)
+                .padding(.top, 32)
+                .padding(.bottom, 32)
+        default:
+            content
+        }
+    }
+}
+
+extension Text {
+    func textModifier(type: String, split: Int = 1, color: Color = Color(.systemBlue)) -> some View {
+        self.modifier(TextModifier(type: type, split: split, color: color))
     }
 }
 

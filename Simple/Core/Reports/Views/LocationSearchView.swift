@@ -15,6 +15,8 @@ struct LocationSearchView: View {
     
     var body: some View {
         let userName = authViewModel.currentUser?.fullname ?? "N/A"
+        let userIsPolice = userName.contains("👮‍♂️")
+        
         VStack {
             TextField("Search for a location...", text: $viewModel.queryFragment)
                 .frame(height: 36)
@@ -28,7 +30,7 @@ struct LocationSearchView: View {
                     HStack {
                         Image(systemName: "mappin.circle.fill")
                             .resizable()
-                            .foregroundColor(Color(userName.contains("👮‍♂️") ? .systemRed : .systemBlue))
+                            .foregroundColor(Color(userIsPolice ? .systemRed : .systemBlue))
                             .accentColor(.white)
                             .frame(width: 40, height: 40)
                         

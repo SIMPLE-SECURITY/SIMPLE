@@ -24,9 +24,11 @@ struct CreateReportView: View {
     
     var body: some View {
         let userName = authViewModel.currentUser?.fullname ?? "N/A"
+        let userIsPolice = userName.contains("👮‍♂️")
+        
         NavigationStack {
             VStack { // no (spacing: 0) so as to scroll contents w/o cutting out title
-                Text(userName.contains("👮‍♂️") ? "Police Report" : "Create Report")
+                Text(userIsPolice ? "Police Report" : "Create Report")
                     .fontWeight(.semibold)
                     .frame(maxWidth: .infinity)
                     .padding(.top, 12)
@@ -53,7 +55,7 @@ struct CreateReportView: View {
                                 Image(systemName: "location.square.fill")
                                     .imageScale(.medium)
                                     .font(.title)
-                                    .foregroundColor(Color(userName.contains("👮‍♂️") ? .systemRed : .systemBlue))
+                                    .foregroundColor(Color(userIsPolice ? .systemRed : .systemBlue))
                                 
                                 Text("Location")
                             }
@@ -68,7 +70,7 @@ struct CreateReportView: View {
                                             .frame(width: 44, height: 44)
                                             .foregroundColor(
                                                 type == selectedLocationType
-                                                ? Color(userName.contains("👮‍♂️") ? .systemRed : .systemBlue)
+                                                ? Color(userIsPolice ? .systemRed : .systemBlue)
                                                 : Color(.systemGray3)
                                             )
                                         
@@ -102,7 +104,7 @@ struct CreateReportView: View {
                     }
                     
                     Section {
-                        if (userName.contains("👮‍♂️")) {
+                        if userIsPolice {
                             Toggle(isOn: $shouldBeAlerted) {
                                 HStack {
                                     Text("Resolved or Alert")
@@ -175,14 +177,11 @@ struct CreateReportView: View {
                         )
                     }
                 } label: {
-                    Text(userName.contains("👮‍♂️") ? "Broadcast Report" : "Send Report")
+                    Text(userIsPolice ? "Broadcast Report" : "Send Report")
                         .fontWeight(.semibold)
-                        
                         .frame(width: UIScreen.main.bounds.width - 40, height: 50)
                         .frame(maxWidth: 675)
-//                                .frame(maxWidth: 600)
-//                                .frame(height: 44)
-                        .background(Color(userName.contains("👮‍♂️") ? .systemRed : .systemBlue))
+                        .background(Color(userIsPolice ? .systemRed : .systemBlue))
                         .foregroundColor(.white)
                         .cornerRadius(10)
                 }

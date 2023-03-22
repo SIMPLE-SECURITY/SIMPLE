@@ -56,7 +56,7 @@ struct LoginView: View {
                 
                 Button {
                     Task {
-                        try await viewModel.signIn(withEmail: email, password: password)
+                        try await viewModel.signIn(withEmail: email.trimmingCharacters(in: .whitespacesAndNewlines), password: password)
                     }
                 } label: {
                     HStack {
@@ -88,7 +88,7 @@ struct LoginView: View {
                 }
             }
             .alert(isPresented: $viewModel.showAuthAlert, content: {
-                Alert(title: Text("Error"), message: Text(viewModel.authError?.description ?? AuthenticationError.unknown.description))
+                Alert(title: Text(viewModel.authError?.title ?? AuthenticationError.unknown.title), message: Text(viewModel.authError?.description ?? AuthenticationError.unknown.description))
             })
         }
         .onTapGesture {

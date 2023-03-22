@@ -29,15 +29,41 @@ enum AuthenticationError: Error {
             self = .passwordFormatting
         } else if localizedDescription.contains("email address is already in use") {
             self = .emailInUse
-        } else if localizedDescription.contains("full name contains emoji") {
+        } else if localizedDescription.contains("emoji") {
             self = .nameHasEmoji
-        } else if localizedDescription.contains("email address is not in registered academia") {
+        } else if localizedDescription.contains("registered academia") {
             self = .emailIsNotInAcademia
-        } else if localizedDescription.contains("email address is not registered as a part of the local law enforcement") {
+        } else if localizedDescription.contains("local law enforcement") {
             self = .emailIsNotRegisteredAsPolice
-        }
-        else {
+        } else {
             self = .unknown
+        }
+    }
+    
+    var title: String {
+        switch self {
+        case .emailFormatting:
+            return "Invalid Email"
+        case .emailDoesNotExist:
+            return "Email Not Found"
+        case .emailInUse:
+            return "Email Already in Use"
+        case .passwordIncorrect:
+            return "Incorrect Password"
+        case .passwordFormatting:
+            return "Invalid Password"
+        case .unverifiedEmail:
+            return "Unverified Email"
+        case .emailVerificationSent:
+            return "Verification Already Sent"
+        case .nameHasEmoji:
+            return "Name Contains Emoji"
+        case .emailIsNotInAcademia:
+            return "Email Not Registered in Academia"
+        case .emailIsNotRegisteredAsPolice:
+            return "Email Not Registered as Police"
+        case .unknown:
+            return "Error"
         }
     }
     
@@ -56,7 +82,7 @@ enum AuthenticationError: Error {
         case .unverifiedEmail:
             return "It looks like your email hasn't been verified yet. Please check your inbox and try again, or click below the button to resend the verification link."
         case .emailVerificationSent:
-            return "It looks like we already sent you an email. Please check your inbox and try again."
+            return "It looks like we already sent you an email. Please check your inbox, as well as your spam or junk folder, and try again."
         case .nameHasEmoji:
             return "Name should not have emojis. Please try again."
         case .emailIsNotInAcademia:

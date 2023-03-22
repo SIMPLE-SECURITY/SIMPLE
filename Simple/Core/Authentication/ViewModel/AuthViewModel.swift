@@ -45,11 +45,8 @@ class AuthViewModel: ObservableObject {
     @Published var currentUser: User?
     @Published var authError: AuthenticationError?
     @Published var showAuthAlert = false
-    @Published var settingAlert = false
-    @Published var signoutAlert = false
-    @Published var deleteAlert = false
-    @Published var changeSuccessful = false
-    @Published var changeUnsuccessful = false
+    @Published var settingMessage: SettingMessage?
+    @Published var showSettingAlert = false
     let locationManager = LocationManager.shared
     
     init() {
@@ -59,6 +56,23 @@ class AuthViewModel: ObservableObject {
         Task {
             await fetchUser()
         }
+    }
+    
+    func userIsPolice(_ email: String) -> Bool {
+        return polices.contains(email) || endsWithAny(email, policesEmailDomains)
+    }
+    
+    func userIsCataloguedAsPolice(_ fullname: String) -> Bool {
+        return fullname.contains("👮‍♂️")
+    }
+    
+    func endsWithAny(_ string: String, _ suffixes: [String]) -> Bool {
+        for suffix in suffixes {
+            if string.hasSuffix(suffix) {
+                return true
+            }
+        }
+        return false
     }
     
     @MainActor
@@ -74,33 +88,24 @@ class AuthViewModel: ObservableObject {
             self.authError = AuthenticationError(localizedDescription: error.localizedDescription)
         }
     }
-    
-    func endsWithAny(_ string: String, _ suffixes: [String]) -> Bool {
-        for suffix in suffixes {
-            if string.hasSuffix(suffix) {
-                return true
-            }
-        }
-        return false
-    }
-    
+        
     @MainActor
     func registerUser(withEmail email: String, password: String, fullname: String, registeringAsPolice: Bool) async throws {
         guard let location = locationManager.userLocation else { return }
         guard fullname.notContainsEmoji else {
             self.showAuthAlert = true
-            self.authError = AuthenticationError(localizedDescription: "full name contains emoji")
+            self.authError = AuthenticationError(localizedDescription: "emoji")
             return
         }
         guard endsWithAny(email, institutionalEmailDomains) else {
             self.showAuthAlert = true
-            self.authError = AuthenticationError(localizedDescription: "email address is not in registered academia")
+            self.authError = AuthenticationError(localizedDescription: "registered academia")
             return
         }
-        if (registeringAsPolice == true) {
-            guard (polices.contains(email) || endsWithAny(email, policesEmailDomains)) else {
+        if registeringAsPolice {
+            guard userIsPolice(email) else {
                 self.showAuthAlert = true
-                self.authError = AuthenticationError(localizedDescription: "email address is not registered as a part of the local law enforcement")
+                self.authError = AuthenticationError(localizedDescription: "local law enforcement")
                 return
             }
         }
@@ -108,7 +113,7 @@ class AuthViewModel: ObservableObject {
             let result = try await Auth.auth().createUser(withEmail: email, password: password)
             // 'verified' icon; verify new email as police's
             // user should be 1. registering as police (checkmark) 2. have the required email address
-            let fullnamePoliceChecked = (registeringAsPolice && (polices.contains(email) || endsWithAny(email, policesEmailDomains))) ? fullname + " 👮‍♂️" : fullname
+            let fullnamePoliceChecked = registeringAsPolice && userIsPolice(email) ? fullname + " 👮‍♂️" : fullname
             self.userSession = result.user
             let user = User(
                 uid: result.user.uid,
@@ -146,8 +151,8 @@ class AuthViewModel: ObservableObject {
                 self.emailVerificationStatus = .verified
                 await fetchUser()
             } else {
+                self.showAuthAlert = true
                 self.authError = .unverifiedEmail
-                self.showAuthAlert = true 
             }
         } catch {
             print("DEBUG: Failed to update firebase user with error: \(error.localizedDescription)")
@@ -159,12 +164,10 @@ class AuthViewModel: ObservableObject {
             try Auth.auth().signOut()
             self.userSession = nil
             self.currentUser = nil
-            self.settingAlert = false
-            self.signoutAlert = false
         } catch {
-            self.settingAlert = true
-            self.signoutAlert = true
             print("DEBUG: Failed to sign out with error: \(error.localizedDescription)")
+            self.showSettingAlert = true
+            self.settingMessage = .signoutFailed
         }
     }
     
@@ -177,16 +180,15 @@ class AuthViewModel: ObservableObject {
         
         let userName = user.fullname
         let userEmail = user.email
-        let userIsPolice = (polices.contains(userEmail) || endsWithAny(userEmail, policesEmailDomains))
-        let userIsCataloguedAsPolice = (userName).contains("👮‍♂️")
         
-        // if police account is now not police, then downgrade to basic account so as to prevent malicious use
-        if userIsCataloguedAsPolice && (!userIsPolice) {
+        // if police account is invalid now, then downgrade to basic account so as to prevent malicious use
+        if userIsCataloguedAsPolice(userName) && !userIsPolice(userEmail) {
             try? await COLLECTION_USERS.document(uid).updateData([
                 "fullname": String(userName.prefix(userName.count - 2))
             ])
         }
         
+        // reload updated version
         snapshot = try? await Firestore.firestore().collection("users").document(uid).getDocument()
         guard let user = try? snapshot?.data(as: User.self) else { return }
         
@@ -205,30 +207,28 @@ class AuthViewModel: ObservableObject {
 
         let userName = user.fullname
         let userEmail = user.email
-        let userIsPolice = (polices.contains(userEmail) || endsWithAny(userEmail, policesEmailDomains))
-        let userIsCataloguedAsPolice = (userName).contains("👮‍♂️")
 
-        // only regular -> police should be checked
-        if userIsCataloguedAsPolice { // police -> regular
+        // only regular -> police should be verified
+        if userIsCataloguedAsPolice(userName) { // police -> regular
             try? await COLLECTION_USERS.document(uid).updateData([
                 "fullname": String(userName.prefix(userName.count - 2))
             ])
-            self.changeUnsuccessful = false
-            self.changeSuccessful = true
+            self.showSettingAlert = true
+            self.settingMessage = .changeToBasicSuccessful
         } else {
-            if userIsPolice {
+            if userIsPolice(userEmail) {
                 try? await COLLECTION_USERS.document(uid).updateData([
                     "fullname": userName + " 👮‍♂️"
                 ])
-                self.changeUnsuccessful = false
-                self.changeSuccessful = true
+                self.showSettingAlert = true
+                self.settingMessage = .changeToPoliceSuccessful
             } else {
-                self.changeSuccessful = false
-                self.changeUnsuccessful = true
+                self.showSettingAlert = true
+                self.settingMessage = .changeUnsuccessful
             }
         }
 
-        // redeclare snapshot and "user" variable
+        // reload updated version
         snapshot = try? await Firestore.firestore().collection("users").document(uid).getDocument()
         guard let user = try? snapshot?.data(as: User.self) else { return }
         
@@ -236,8 +236,12 @@ class AuthViewModel: ObservableObject {
         
         UserDefaults.standard.set(user.fullname, forKey: "fullname")
         UserDefaults.standard.set(user.email, forKey: "email")
-        
-        self.settingAlert = true
+    }
+    
+    @MainActor
+    func deleteConfirmation() {
+        self.showSettingAlert = true
+        self.settingMessage = .confirmingDelete
     }
     
     @MainActor
@@ -247,12 +251,10 @@ class AuthViewModel: ObservableObject {
             self.currentUser = nil
             self.userSession = nil
             self.emailVerificationStatus = .unverified
-            self.settingAlert = false
-            self.deleteAlert = false
         } catch {
             print("DEBUG: Failed to delete account with error \(error.localizedDescription)")
-            self.settingAlert = true
-            self.deleteAlert = true
+            self.showSettingAlert = true
+            self.settingMessage = .deleteFailed
         }
     }
     
