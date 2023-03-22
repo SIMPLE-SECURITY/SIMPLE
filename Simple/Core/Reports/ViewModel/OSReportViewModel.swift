@@ -73,7 +73,7 @@ class OSReportViewModel: NSObject, ObservableObject {
         guard let lastUploadDate = UserDefaults.standard.value(forKey: "lastUploadTime") as? Date else { return true }
         guard let fullname = UserDefaults.standard.value(forKey: "fullname") as? String else { return true }
         let userIsPolice = fullname.contains("👮‍♂️")
-        timeLimitInSeconds = userIsPolice ? 10 : 5 * 60 // if police, then 10 seconds
+        timeLimitInSeconds = userIsPolice ? 10 : 20 * 60 // if police, then 10 seconds
         let timeSinceLastUploadInSeconds = Date().timeIntervalSince(lastUploadDate)
         return timeLimitInSeconds < Double(timeSinceLastUploadInSeconds)
     }
