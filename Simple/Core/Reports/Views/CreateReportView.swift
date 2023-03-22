@@ -47,6 +47,9 @@ struct CreateReportView: View {
                             .onReceive(description.publisher.collect()) {
                                 self.description = String($0.prefix(120))
                             }
+                            .onTapGesture {
+                                hideKeyboard()
+                            }
                     }
                     
                     Section {
@@ -215,9 +218,6 @@ struct CreateReportView: View {
                     dismiss()
                 }
             })
-            .onTapGesture {
-                hideKeyboard()
-            }
             .onAppear {
                 showLocationSearch = false
             }
