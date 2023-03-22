@@ -9,7 +9,7 @@ For more information about SIMPLE, please visit our website at https://www.simpl
 Founded and developed by Charles Shin (tlsgusdn1107).  
 
 Version: 1.0  
-Build: 25
+Build: 26
 
 The following email addresses are catalogued as part of local law enforcement:  
   
