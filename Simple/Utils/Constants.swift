@@ -6,9 +6,10 @@
 //
 
 import Firebase
+import UIKit
 import Foundation
 
-// emails specially allowed to have police account (police email domains are listed in "policeEmailDomains" variable)
+// emails specially allowed to have police account (police email domains are listed in "policesEmailDomains" variable)
 let policesData = try! Data(contentsOf: URL(string: "https://raw.githubusercontent.com/tlsgusdn1107/SIMPLE/main/Simple/Utils/polices.json")!)
 let polices = try! JSONDecoder().decode([String].self, from: policesData)
 
@@ -23,8 +24,8 @@ let policesLocation = try! JSONDecoder().decode([[Double]].self, from: policesLo
 // https://theboutiqueadventurer.com/most-dangerous-cities-in-the-united-states/
 // https://www.forbes.com/sites/laurabegleybloom/2023/01/31/most-dangerous-cities-in-the-us-crime-in-america/?sh=6ae421674b25
 // search more email domains in Google: "neverbounce [city name] police department" (e.g. "neverbounce detroit police department")
-let policeEmailDomainsData = try! Data(contentsOf: URL(string: "https://raw.githubusercontent.com/tlsgusdn1107/SIMPLE/main/Simple/Utils/policeEmailDomains.json")!)
-let policeEmailDomains = try! JSONDecoder().decode([String].self, from: policeEmailDomainsData)
+let policesEmailDomainsData = try! Data(contentsOf: URL(string: "https://raw.githubusercontent.com/tlsgusdn1107/SIMPLE/main/Simple/Utils/policesEmailDomains.json")!)
+let policesEmailDomains = try! JSONDecoder().decode([String].self, from: policesEmailDomainsData)
 
  
 // US universities are only catalogued so far (+ Chadwick community, JHMI)

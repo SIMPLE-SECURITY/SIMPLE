@@ -52,7 +52,7 @@
 		2BD76201299AF12100312907 /* AuthenticationError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BD76200299AF12100312907 /* AuthenticationError.swift */; };
 		2BD76205299C3A4300312907 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 2BD76204299C3A4300312907 /* GoogleService-Info.plist */; };
 		32E5F92829C9E17500DB1104 /* polices.json in Resources */ = {isa = PBXBuildFile; fileRef = 32E5F92329C9E17300DB1104 /* polices.json */; };
-		32E5F92929C9E17500DB1104 /* policeEmailDomains.json in Resources */ = {isa = PBXBuildFile; fileRef = 32E5F92429C9E17300DB1104 /* policeEmailDomains.json */; };
+		32E5F92929C9E17500DB1104 /* policesEmailDomains.json in Resources */ = {isa = PBXBuildFile; fileRef = 32E5F92429C9E17300DB1104 /* policesEmailDomains.json */; };
 		32E5F92A29C9E17500DB1104 /* policesLocation.json in Resources */ = {isa = PBXBuildFile; fileRef = 32E5F92529C9E17400DB1104 /* policesLocation.json */; };
 		32E5F92B29C9E17500DB1104 /* institutionalEmailDomains.json in Resources */ = {isa = PBXBuildFile; fileRef = 32E5F92629C9E17400DB1104 /* institutionalEmailDomains.json */; };
 		32E5F92D29C9E1B700DB1104 /* Constants-Annotation.txt in Resources */ = {isa = PBXBuildFile; fileRef = 32E5F92C29C9E1B700DB1104 /* Constants-Annotation.txt */; };
@@ -95,7 +95,7 @@
 		2BD76200299AF12100312907 /* AuthenticationError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationError.swift; sourceTree = "<group>"; };
 		2BD76204299C3A4300312907 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "GoogleService-Info.plist"; sourceTree = SOURCE_ROOT; };
 		32E5F92329C9E17300DB1104 /* polices.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = polices.json; sourceTree = "<group>"; };
-		32E5F92429C9E17300DB1104 /* policeEmailDomains.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = policeEmailDomains.json; sourceTree = "<group>"; };
+		32E5F92429C9E17300DB1104 /* policesEmailDomains.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = policesEmailDomains.json; sourceTree = "<group>"; };
 		32E5F92529C9E17400DB1104 /* policesLocation.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = policesLocation.json; sourceTree = "<group>"; };
 		32E5F92629C9E17400DB1104 /* institutionalEmailDomains.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = institutionalEmailDomains.json; sourceTree = "<group>"; };
 		32E5F92C29C9E1B700DB1104 /* Constants-Annotation.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "Constants-Annotation.txt"; sourceTree = "<group>"; };
@@ -127,7 +127,7 @@
 			children = (
 				32E5F92C29C9E1B700DB1104 /* Constants-Annotation.txt */,
 				32E5F92629C9E17400DB1104 /* institutionalEmailDomains.json */,
-				32E5F92429C9E17300DB1104 /* policeEmailDomains.json */,
+				32E5F92429C9E17300DB1104 /* policesEmailDomains.json */,
 				32E5F92329C9E17300DB1104 /* polices.json */,
 				32E5F92529C9E17400DB1104 /* policesLocation.json */,
 				2B2E48EF29788A9300EDE277 /* Constants.swift */,
@@ -413,7 +413,7 @@
 				32E5F92829C9E17500DB1104 /* polices.json in Resources */,
 				2B3E84BE297234BD00A0FDD7 /* Assets.xcassets in Resources */,
 				32E5F92B29C9E17500DB1104 /* institutionalEmailDomains.json in Resources */,
-				32E5F92929C9E17500DB1104 /* policeEmailDomains.json in Resources */,
+				32E5F92929C9E17500DB1104 /* policesEmailDomains.json in Resources */,
 				32E5F92A29C9E17500DB1104 /* policesLocation.json in Resources */,
 				32E5F92D29C9E1B700DB1104 /* Constants-Annotation.txt in Resources */,
 				2BD76205299C3A4300312907 /* GoogleService-Info.plist in Resources */,

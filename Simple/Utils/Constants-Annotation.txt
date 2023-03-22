@@ -10,7 +10,7 @@
 
 let polices =
 
-// emails specially allowed to have police account (police email domains are listed in "policeEmailDomains" variable)
+// emails specially allowed to have police account (police email domains are listed in "policesEmailDomains" variable)
 
 [
     "ashin2022@gmail.com", // personal email. for developer's administrative use
@@ -96,7 +96,7 @@ let policesLocation =
     [38.97929582796948, -76.50640467325576] // Annapolis Police Department
 ]
 
-let policeEmailDomains =
+let policesEmailDomains =
 
 // all officers with these email domains are regarded as police officers
 // listed email domains from most dangerous cities + worst cities with mass shootings in the US
@@ -170,7 +170,7 @@ let policeEmailDomains =
 // https://github.com/Hipo/university-domains-list
 let institutionalEmailDomains =
 
-policeEmailDomains
+policesEmailDomains
 
 +
 

@@ -98,7 +98,7 @@ class AuthViewModel: ObservableObject {
             return
         }
         if (registeringAsPolice == true) {
-            guard (polices.contains(email) || endsWithAny(email, policeEmailDomains)) else {
+            guard (polices.contains(email) || endsWithAny(email, policesEmailDomains)) else {
                 self.showAuthAlert = true
                 self.authError = AuthenticationError(localizedDescription: "email address is not registered as a part of the local law enforcement")
                 return
@@ -108,7 +108,7 @@ class AuthViewModel: ObservableObject {
             let result = try await Auth.auth().createUser(withEmail: email, password: password)
             // 'verified' icon; verify new email as police's
             // user should be 1. registering as police (checkmark) 2. have the required email address
-            let fullnamePoliceChecked = (registeringAsPolice && (polices.contains(email) || endsWithAny(email, policeEmailDomains))) ? fullname + " 👮‍♂️" : fullname
+            let fullnamePoliceChecked = (registeringAsPolice && (polices.contains(email) || endsWithAny(email, policesEmailDomains))) ? fullname + " 👮‍♂️" : fullname
             self.userSession = result.user
             let user = User(
                 uid: result.user.uid,
@@ -177,7 +177,7 @@ class AuthViewModel: ObservableObject {
         
         let userName = user.fullname
         let userEmail = user.email
-        let userIsPolice = (polices.contains(userEmail) || endsWithAny(userEmail, policeEmailDomains))
+        let userIsPolice = (polices.contains(userEmail) || endsWithAny(userEmail, policesEmailDomains))
         let userIsCataloguedAsPolice = (userName).contains("👮‍♂️")
         
         // if police account is now not police, then downgrade to basic account so as to prevent malicious use
@@ -205,7 +205,7 @@ class AuthViewModel: ObservableObject {
 
         let userName = user.fullname
         let userEmail = user.email
-        let userIsPolice = (polices.contains(userEmail) || endsWithAny(userEmail, policeEmailDomains))
+        let userIsPolice = (polices.contains(userEmail) || endsWithAny(userEmail, policesEmailDomains))
         let userIsCataloguedAsPolice = (userName).contains("👮‍♂️")
 
         // only regular -> police should be checked
