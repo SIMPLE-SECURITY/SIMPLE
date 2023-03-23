@@ -1,5 +1,6 @@
 # SIMPLE  
 Official repository for SIMPLE, the first iOS open-source initiative to ensure privacy within public safety.  
+To download the beta version of the app, please visit https://www.simple-secure.org/install.  
   
 Certain information are removed from this repository to prevent misuse.   
 All files necessary for app functionality are in this repository.  
