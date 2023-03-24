@@ -95,7 +95,8 @@ The following email addresses are catalogued as part of local law enforcement:
     "@stpaul.gov", // 367 Grove St, St Paul, MN 55101
     "@northamptonpd.com", // 29 Center St, Northampton, MA 01060
     "@annapolis.gov", // 199 Taylor Ave, Annapolis, MD 21401
-    "@sandiego.gov" // 1401 Broadway, San Diego, CA 92101
+    "@sandiego.gov", // 1401 Broadway, San Diego, CA 92101
+    "@npcc.police.uk" // 10 Victoria St, London SW1H 0NN, England
 
 To add your local law enforcement, please email charlesshin@simple-secure.org.  
 
