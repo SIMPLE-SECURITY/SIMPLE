@@ -84,7 +84,18 @@ The following email addresses are catalogued as part of local law enforcement:
     "@wvsp.gov", // 1315 Commerce St, Wellsburg, WV 26070
     "@amherstma.gov", // 111 Main St, Amherst, MA 01002
     "@townofmiddlebury.org", // 1 Lucius Shaw Ln, Middlebury, VT 05753
-    "@haverfordtownship.org", // 1010 Darby Rd, Have
+    "@haverfordtownship.org", // 1010 Darby Rd, Havertown, PA 19083
+    "@lewistonmaine.gov", // 171 Park St, Lewiston, ME 04240
+    "@clintoncountygov.com", // Clinton, NY 13323
+    "@waterville-me.gov", // 10 Colby St, Waterville, ME 04901
+    "@middletownct.gov", // 222 Main St, Middletown, CT 06457
+    "@grinnelliowa.gov", // 1020 Spring St, Grinnell, IA 50112
+    "@cityofpoughkeepsie.com", // 62 Civic Center Plaza, Poughkeepsie, NY 12601
+    "@northfieldmn.gov", // 1615 Riverview Dr, Northfield, MN 55057
+    "@stpaul.gov", // 367 Grove St, St Paul, MN 55101
+    "@northamptonpd.com", // 29 Center St, Northampton, MA 01060
+    "@annapolis.gov", // 199 Taylor Ave, Annapolis, MD 21401
+    "@sandiego.gov" // 1401 Broadway, San Diego, CA 92101
 
 To add your local law enforcement, please email charlesshin@simple-secure.org.  
 
