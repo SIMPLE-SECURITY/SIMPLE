@@ -248,7 +248,8 @@ struct CheckmarkToggleStyle: ToggleStyle {
                                 .foregroundColor(configuration.isOn ? .red : .green)
                         )
                         .offset(x: configuration.isOn ? 11 : -11, y: 0)
-                        .animation(Animation.linear(duration: 0.125))
+                        .animation(.linear(duration: 0.125), value: configuration.isOn)
+//                        .animation(Animation.linear(duration: 0.125))
                         
                 ).cornerRadius(20)
                 .onTapGesture { configuration.isOn.toggle() }
