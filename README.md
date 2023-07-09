@@ -1,4 +1,7 @@
-<img src="https://raw.githubusercontent.com/tlsgusdn1107/SIMPLE/main/Simple/Assets.xcassets/simple-logo.imageset/logo-big-name-cropped.png" width="250" height="250">
+<p float="left">
+  <img src="https://raw.githubusercontent.com/tlsgusdn1107/SIMPLE/main/Simple/Assets.xcassets/simple-logo.imageset/logo-big-name-cropped.png" width="250" height="250" />
+  <img src="https://raw.githubusercontent.com/tlsgusdn1107/SIMPLE/main/Simple/Assets.xcassets/simple-logo-dark.imageset/image.png" width="250" height="250" />
+</p>
 
 # SIMPLE  
 Official repository for SIMPLE, the first iOS open-source initiative to ensure privacy within public safety.  
