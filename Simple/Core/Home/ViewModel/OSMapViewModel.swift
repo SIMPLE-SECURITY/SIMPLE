@@ -97,7 +97,6 @@ class OSMapViewModel: ObservableObject {
         }
     }
     
-    
     @MainActor
     func refreshReports() {
         self.userRegion = nil
