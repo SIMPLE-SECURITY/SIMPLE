@@ -311,3 +311,4 @@ extension OSReportViewModel: MKLocalSearchCompleterDelegate {
         self.results = completer.results.filter({ !$0.subtitle.isEmpty && $0.subtitle != "Search Nearby" })
     }
 }
+
