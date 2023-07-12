@@ -4,8 +4,8 @@
 </p>
 
 # SIMPLE  
-Official repository for SIMPLE, the first iOS open-source application by Simple Security to ensure privacy within public safety.  
-Check out our mission statement at https://www.simple-secure.org/mission.
+Official repository for SIMPLE, the first open-source iOS app to ensure privacy within public safety.  
+Check out our mission statement at https://www.simple-secure.org/mission.  
 To try it by TestFlight mode, please visit https://www.simple-secure.org/install.  
 
 # General Info
