@@ -16,7 +16,7 @@ struct SettingsView: View {
             if let user = viewModel.currentUser {
                 let userIsPolice = (user.fullname).contains("👮‍♂️")
                 
-                HStack(spacing: 15) {
+                HStack (spacing: 15) {
                     Text(userIsPolice ? "Police" : user.initials)
                         .font(userIsPolice ? .title2 : .title)
                         .fontWeight(.semibold)
