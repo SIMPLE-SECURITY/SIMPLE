@@ -108,5 +108,5 @@ The following email addresses are catalogued as part of local law enforcement:
 To add your local law enforcement, please email charlesshin@simple-secure.org.  
 
 # Credits
-Founded by Charles Shin (tlsgusdn1107). Developing with members of Simple Security community. 
+Founded by Charles Shin (tlsgusdn1107). Developing with members of Simple Security community.  
 Copyright © 2022-2023 Simple Security. All rights reserved.
