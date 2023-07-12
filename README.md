@@ -3,20 +3,22 @@
   <img src="https://raw.githubusercontent.com/tlsgusdn1107/SIMPLE/main/Simple/Assets.xcassets/simple-logo-dark.imageset/image.png" width="250" height="250" />
 </p>
 
-# SIMPLE  
-Official repository for SIMPLE, the first iOS open-source initiative to ensure privacy within public safety.  
-To download the beta version of the app, please visit https://www.simple-secure.org/install.  
-  
-Certain information are removed from this repository to prevent misuse.   
-All files necessary for app functionality are in this repository.  
-For code-related inquiries, please create an issue in the repository page.  
-For other inquiries, please contact charlesshin@simple-secure.org.  
-For more information about SIMPLE, please visit our website at https://www.simple-secure.org/.  
-Founded and developed by Charles Shin (tlsgusdn1107).  
+# SIMPLE [![Version](https://img.shields.io/badge/Version-1.0-blue)](#) [![Build](https://img.shields.io/badge/Build-29-brightgreen)](#)  
+Official repository for SIMPLE, the first open-source iOS app to ensure privacy within public safety.  
+Check out our mission statement at https://www.simple-secure.org/mission.  
+To try it by TestFlight mode, please visit https://www.simple-secure.org/install.  
 
-Version: 1.0  
-Build: 29
+# General Info
+1. GoogleInfo.plist file is redacted to prevent misuse.   
+2. All files necessary for app functionality are in this repository.  
+3. For code-related inquiries, please create an issue in the repository page.  
+4. For other inquiries, please contact charlesshin@simple-secure.org.  
+5. For more information about SIMPLE, please visit our website at https://www.simple-secure.org/.  
 
+# Community
+SIMPLE also has its dedicated Discord community! Feel free to join by clicking https://discord.gg/ceCa5SYm.
+
+# Supported Law Enforcement Agencies
 The following email addresses are catalogued as part of local law enforcement:  
   
     "@detroitmi.gov", // Detroit, Michigan
@@ -105,4 +107,6 @@ The following email addresses are catalogued as part of local law enforcement:
 
 To add your local law enforcement, please email charlesshin@simple-secure.org.  
 
-Copyright © 2022-2023 SIMPLE. All rights reserved.
+# Credits
+Founded by Charles Shin (tlsgusdn1107). Developing with members of Simple Security community.  
+Copyright © 2022-2023 Simple Security. All rights reserved.
