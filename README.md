@@ -4,6 +4,7 @@
 </p>
 
 # SIMPLE  
+[![Version](https://img.shields.io/badge/Version-1.0-blue)](#) [![Build](https://img.shields.io/badge/Build-Success-brightgreen)](#)
 Official repository for SIMPLE, the first open-source iOS app to ensure privacy within public safety.  
 Check out our mission statement at https://www.simple-secure.org/mission.  
 To try it by TestFlight mode, please visit https://www.simple-secure.org/install.  
