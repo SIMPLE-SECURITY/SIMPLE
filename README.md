@@ -18,10 +18,6 @@ To try it by TestFlight mode, please visit https://www.simple-secure.org/install
 # Community
 SIMPLE also has its dedicated Discord community! Feel free to join by clicking https://discord.gg/ceCa5SYm.
 
-# Build Info
-Version: 1.0  
-Build: 29
-
 # Supported Law Enforcement Agencies
 The following email addresses are catalogued as part of local law enforcement:  
   
