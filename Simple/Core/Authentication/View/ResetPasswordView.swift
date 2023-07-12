@@ -25,7 +25,6 @@ struct ResetPasswordView: View {
                 .frame(width: 140, height: 140*2500/2429)
                 .padding(.vertical, 32)
             
-            
             OSInputField(text: $email,
                          title: "Email Address",
                          placeholder: "Enter the email for your account")

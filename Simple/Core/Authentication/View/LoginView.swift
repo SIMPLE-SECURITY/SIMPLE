@@ -15,7 +15,7 @@ struct LoginView: View {
     
     var body: some View {
         NavigationStack {
-            VStack (spacing: 24) {
+            VStack(spacing: 24) {
                 
                 Spacer()
                 
@@ -31,7 +31,7 @@ struct LoginView: View {
                     .autocapitalization(.none)
                     .frame(maxWidth: 500)
                     
-                    VStack (spacing: 10) {
+                    VStack(spacing: 10) {
                         OSInputField(text: $password,
                                      title: "Password",
                                      placeholder: "Enter your password",
@@ -52,7 +52,6 @@ struct LoginView: View {
                 }
                 .padding(.horizontal)
                 .padding(.top, 12)
-                
                 
                 Button {
                     Task {

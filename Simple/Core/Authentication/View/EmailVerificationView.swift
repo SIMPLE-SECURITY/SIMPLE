@@ -23,7 +23,6 @@ struct EmailVerificationView: View {
                 .foregroundColor(Color(.systemBlue))
                 .padding(.top, 56)
 
-            
             Text("Verification sent")
                 .font(.title3)
                 .fontWeight(.semibold)
@@ -83,8 +82,6 @@ struct EmailVerificationView: View {
                 .font(.footnote)
                 .padding(.bottom, 24)
             }
-            
-            
         }
         .alert(isPresented: $viewModel.showAuthAlert, content: {
             Alert(title: Text(viewModel.authError?.title ?? AuthenticationError.unknown.title), message: Text(viewModel.authError?.description ?? AuthenticationError.unknown.description))
@@ -98,4 +95,3 @@ struct EmailVerificationView_Previews: PreviewProvider {
         EmailVerificationView()
     }
 }
-
