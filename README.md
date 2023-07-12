@@ -3,8 +3,7 @@
   <img src="https://raw.githubusercontent.com/tlsgusdn1107/SIMPLE/main/Simple/Assets.xcassets/simple-logo-dark.imageset/image.png" width="250" height="250" />
 </p>
 
-# SIMPLE  
-[![Version](https://img.shields.io/badge/Version-1.0-blue)](#) [![Build](https://img.shields.io/badge/Build-Success-brightgreen)](#)
+# SIMPLE [![Version](https://img.shields.io/badge/Version-1.0-blue)](#) [![Build](https://img.shields.io/badge/Build-29-brightgreen)](#)  
 Official repository for SIMPLE, the first open-source iOS app to ensure privacy within public safety.  
 Check out our mission statement at https://www.simple-secure.org/mission.  
 To try it by TestFlight mode, please visit https://www.simple-secure.org/install.  
