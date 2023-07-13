@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import SFSafeSymbols
 
 struct ResetPasswordView: View {
     @Environment(\.colorScheme) var colorScheme
@@ -24,8 +25,7 @@ struct ResetPasswordView: View {
                 .resizable()
                 .frame(width: 140, height: 140*2500/2429)
                 .padding(.vertical, 32)
-            
-            
+
             OSInputField(text: $email,
                          title: "Email Address",
                          placeholder: "Enter the email for your account")
@@ -40,7 +40,7 @@ struct ResetPasswordView: View {
                 HStack {
                     Text("SEND RESET LINK")
                         .fontWeight(.semibold)
-                    Image(systemName: "arrow.right")
+                    Image(systemSymbol: SFSymbol.arrowRight)
                 }
                 .foregroundColor(colorScheme == .dark ? .black : .white)
                 .frame(width: 200, height: 50)
@@ -57,7 +57,7 @@ struct ResetPasswordView: View {
                 dismiss()
             } label: {
                 HStack {
-                    Image(systemName: "arrow.left")
+                    Image(systemSymbol: SFSymbol.arrowLeft)
 
                     Text("Back to Login")
                         .fontWeight(.semibold)

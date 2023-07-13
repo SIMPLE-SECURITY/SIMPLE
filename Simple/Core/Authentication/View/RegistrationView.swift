@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import SFSafeSymbols
 
 struct iOSCheckboxToggleStyle: ToggleStyle {
     func makeBody(configuration: Configuration) -> some View {
@@ -14,7 +15,7 @@ struct iOSCheckboxToggleStyle: ToggleStyle {
         }, label: {
             HStack {
                 configuration.label
-                Image(systemName: configuration.isOn ? "checkmark.square" : "square")
+                Image(systemSymbol: configuration.isOn ? SFSymbol.checkmarkSquare : SFSymbol.square)
             }
             .frame(maxWidth: 500, alignment: .trailing)
         })
@@ -87,7 +88,7 @@ struct RegistrationView: View {
                         Text("SIGN UP")
                             .fontWeight(.semibold)
                         
-                        Image(systemName: "arrow.right")
+                        Image(systemSymbol: SFSymbol.arrowRight)
                     }
                     .foregroundColor(colorScheme == .dark ? .black : .white)
                     .frame(width: 175, height: 50)

@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import SFSafeSymbols
 
 struct LoginView: View {
     @Environment(\.colorScheme) var colorScheme
@@ -15,10 +16,10 @@ struct LoginView: View {
     
     var body: some View {
         NavigationStack {
-            VStack (spacing: 24) {
-                
+            VStack(spacing: 24) {
+
                 Spacer()
-                
+
                 Image(colorScheme == .dark ? "simple-logo-dark" : "simple-logo")
                     .resizable()
                     .frame(width: 150, height: 150)
@@ -31,7 +32,7 @@ struct LoginView: View {
                     .autocapitalization(.none)
                     .frame(maxWidth: 500)
                     
-                    VStack (spacing: 10) {
+                    VStack(spacing: 10) {
                         OSInputField(text: $password,
                                      title: "Password",
                                      placeholder: "Enter your password",
@@ -52,8 +53,7 @@ struct LoginView: View {
                 }
                 .padding(.horizontal)
                 .padding(.top, 12)
-                
-                
+
                 Button {
                     Task {
                         try await viewModel.signIn(withEmail: email.trimmingCharacters(in: .whitespacesAndNewlines), password: password)
@@ -62,7 +62,7 @@ struct LoginView: View {
                     HStack {
                         Text("SIGN IN")
                             .fontWeight(.semibold)
-                        Image(systemName: "arrow.right")
+                        Image(systemSymbol: SFSymbol.arrowRight)
                     }
                     .foregroundColor(colorScheme == .dark ? .black : .white)
                     .frame(width: 175, height: 50)

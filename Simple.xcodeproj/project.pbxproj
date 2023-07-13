@@ -57,6 +57,7 @@
 		32E5F92B29C9E17500DB1104 /* institutionalEmailDomains.json in Resources */ = {isa = PBXBuildFile; fileRef = 32E5F92629C9E17400DB1104 /* institutionalEmailDomains.json */; };
 		32E5F92D29C9E1B700DB1104 /* Constants-Annotation.txt in Resources */ = {isa = PBXBuildFile; fileRef = 32E5F92C29C9E1B700DB1104 /* Constants-Annotation.txt */; };
 		32E5F92F29CAE0F700DB1104 /* SettingMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32E5F92E29CAE0F700DB1104 /* SettingMessage.swift */; };
+		48047EC72A605EAA0095F991 /* SFSafeSymbols in Frameworks */ = {isa = PBXBuildFile; productRef = 48047EC62A605EAA0095F991 /* SFSafeSymbols */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -118,6 +119,7 @@
 				2B2E48E82978760100EDE277 /* FirebaseStorage in Frameworks */,
 				2B2E48DA2978760100EDE277 /* FirebaseAnalytics in Frameworks */,
 				2B2E48DC2978760100EDE277 /* FirebaseAuth in Frameworks */,
+				48047EC72A605EAA0095F991 /* SFSafeSymbols in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -367,6 +369,7 @@
 				2B2E48E72978760100EDE277 /* FirebaseStorage */,
 				2B2E48EA29787A1E00EDE277 /* GeoFire */,
 				2B2E48EC29787A1E00EDE277 /* GeoFireUtils */,
+				48047EC62A605EAA0095F991 /* SFSafeSymbols */,
 			);
 			productName = OpenSafe;
 			productReference = 2B3E84B6297234BB00A0FDD7 /* Simple.app */;
@@ -399,6 +402,7 @@
 			packageReferences = (
 				2B2E48D82978760100EDE277 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 				2B2E48E929787A1E00EDE277 /* XCRemoteSwiftPackageReference "geofire-objc" */,
+				48047EC52A605EAA0095F991 /* XCRemoteSwiftPackageReference "SFSafeSymbols" */,
 			);
 			productRefGroup = 2B3E84B7297234BB00A0FDD7 /* Products */;
 			projectDirPath = "";
@@ -707,6 +711,14 @@
 				kind = branch;
 			};
 		};
+		48047EC52A605EAA0095F991 /* XCRemoteSwiftPackageReference "SFSafeSymbols" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SFSafeSymbols/SFSafeSymbols";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 4.0.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -759,6 +771,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 2B2E48E929787A1E00EDE277 /* XCRemoteSwiftPackageReference "geofire-objc" */;
 			productName = GeoFireUtils;
+		};
+		48047EC62A605EAA0095F991 /* SFSafeSymbols */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 48047EC52A605EAA0095F991 /* XCRemoteSwiftPackageReference "SFSafeSymbols" */;
+			productName = SFSafeSymbols;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

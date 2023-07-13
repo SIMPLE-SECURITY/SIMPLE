@@ -96,8 +96,7 @@ class OSMapViewModel: ObservableObject {
             listeners.append(listener)
         }
     }
-    
-    
+
     @MainActor
     func refreshReports() {
         self.userRegion = nil
