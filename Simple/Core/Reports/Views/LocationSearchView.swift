@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import SFSafeSymbols
 
 struct LocationSearchView: View {
     @ObservedObject var viewModel: OSReportViewModel
@@ -28,7 +29,7 @@ struct LocationSearchView: View {
             List {
                 ForEach(viewModel.results, id: \.self) { result in
                     HStack {
-                        Image(systemName: "mappin.circle.fill")
+                        Image(systemSymbol: SFSymbol.mappinCircleFill)
                             .resizable()
                             .foregroundColor(Color(userIsPolice ? .systemRed : .systemBlue))
                             .accentColor(.white)

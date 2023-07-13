@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import SFSafeSymbols
 
 struct EmailVerificationView: View {
     @Environment(\.colorScheme) var colorScheme
@@ -23,7 +24,6 @@ struct EmailVerificationView: View {
                 .foregroundColor(Color(.systemBlue))
                 .padding(.top, 56)
 
-            
             Text("Verification sent")
                 .font(.title3)
                 .fontWeight(.semibold)
@@ -45,7 +45,7 @@ struct EmailVerificationView: View {
                 HStack {
                     Text("CONTINUE TO APP")
                         .fontWeight(.semibold)
-                    Image(systemName: "arrow.right")
+                    Image(systemSymbol: SFSymbol.arrowRight)
                 }
                 .foregroundColor(colorScheme == .dark ? .black : .white)
                 .frame(width: 165, height: 70)
@@ -70,21 +70,19 @@ struct EmailVerificationView: View {
             }
 
             Spacer()
-            
-           
+
             Button {
                 viewModel.signout()
             } label: {
                 HStack(spacing: 4) {
-                    Image(systemName: "arrow.left")
+                    Image(systemSymbol: SFSymbol.arrowLeft)
                     Text("Return to Login page")
                         .fontWeight(.semibold)
                 }
                 .font(.footnote)
                 .padding(.bottom, 24)
             }
-            
-            
+
         }
         .alert(isPresented: $viewModel.showAuthAlert, content: {
             Alert(title: Text(viewModel.authError?.title ?? AuthenticationError.unknown.title), message: Text(viewModel.authError?.description ?? AuthenticationError.unknown.description))
@@ -98,4 +96,3 @@ struct EmailVerificationView_Previews: PreviewProvider {
         EmailVerificationView()
     }
 }
-

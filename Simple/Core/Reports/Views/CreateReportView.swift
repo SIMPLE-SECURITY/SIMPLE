@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import SFSafeSymbols
 
 struct CreateReportView: View {
     @State private var selectedReportType = OSReportType.medicalEmergency.rawValue
@@ -55,7 +56,7 @@ struct CreateReportView: View {
                     Section {
                         VStack(alignment: .leading) {
                             HStack {
-                                Image(systemName: "location.square.fill")
+                                Image(systemSymbol: SFSymbol.locationSquareFill)
                                     .imageScale(.medium)
                                     .font(.title)
                                     .foregroundColor(Color(userIsPolice ? .systemRed : .systemBlue))
@@ -114,7 +115,7 @@ struct CreateReportView: View {
                                     Button(action: {
                                         self.policeShowInfo.toggle()
                                     }) {
-                                        Image(systemName: "info.circle")
+                                        Image(systemSymbol: SFSymbol.infoCircle)
                                             .foregroundColor(Color(.systemRed))
                                     }
                                 }
@@ -134,7 +135,7 @@ struct CreateReportView: View {
                                     Button(action: {
                                         self.onlyPolicesCanSeeReportShowInfo.toggle()
                                     }) {
-                                        Image(systemName: "info.circle")
+                                        Image(systemSymbol: SFSymbol.infoCircle)
                                             .foregroundColor(Color(.systemRed))
                                     }
                                 }
@@ -154,7 +155,7 @@ struct CreateReportView: View {
                                     Button(action: {
                                         self.showInfo.toggle()
                                     }) {
-                                        Image(systemName: "info.circle")
+                                        Image(systemSymbol: SFSymbol.infoCircle)
                                     }
                                 }
                             }
@@ -240,7 +241,7 @@ struct CheckmarkToggleStyle: ToggleStyle {
                         .foregroundColor(.white)
                         .padding(.all, 3)
                         .overlay(
-                            Image(systemName: configuration.isOn ? "exclamationmark" : "checkmark")
+                            Image(systemSymbol: configuration.isOn ? SFSymbol.exclamationmark : SFSymbol.checkmark)
                                 .resizable()
                                 .aspectRatio(contentMode: .fit)
                                 .font(Font.title.weight(.black))

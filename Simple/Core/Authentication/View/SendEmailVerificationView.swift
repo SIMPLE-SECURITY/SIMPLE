@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import SFSafeSymbols
 
 struct SendEmailVerificationView: View {
     @Environment(\.colorScheme) var colorScheme
@@ -43,7 +44,7 @@ struct SendEmailVerificationView: View {
                 HStack {
                     Text("SEND EMAIL")
                         .fontWeight(.semibold)
-                    Image(systemName: "arrow.right")
+                    Image(systemSymbol: SFSymbol.arrowRight)
                 }
                 .foregroundColor(colorScheme == .dark ? .black : .white)
                 .frame(width: 160, height: 50)
@@ -58,7 +59,7 @@ struct SendEmailVerificationView: View {
                 viewModel.signout()
             } label: {
                 HStack(spacing: 4) {
-                    Image(systemName: "arrow.left")
+                    Image(systemSymbol: SFSymbol.arrowLeft)
                     Text("Return to Login page")
                         .fontWeight(.semibold)
                 }

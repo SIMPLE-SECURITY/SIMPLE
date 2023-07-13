@@ -311,6 +311,5 @@ let MOCK_REPORTS: [OSReport] = [
         geohash: "9q9hrh5sdd",
         locationString: "1 Hacker Way, Cupertino CA",
         status: .unconfirmed
-    ),
+    )
 ]
-
