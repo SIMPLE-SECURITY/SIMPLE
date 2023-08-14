@@ -9,7 +9,7 @@ enum SettingMessage: Error {
     case signoutFailed
     case confirmingDelete
     case changeUnsuccessful
-    case changeToPoliceSuccessful
+    case changeToPolicesuccessful
     case changeToBasicSuccessful
     case deleteFailed
     case unknown
@@ -22,7 +22,7 @@ enum SettingMessage: Error {
         } else if localizedDescription.contains("change unsuccessful") {
             self = .changeUnsuccessful
         } else if localizedDescription.contains("change to police successful") {
-            self = .changeToPoliceSuccessful
+            self = .changeToPolicesuccessful
         } else if localizedDescription.contains("change to basic successful") {
             self = .changeToBasicSuccessful
         } else if localizedDescription.contains("deletion failed") {
@@ -40,7 +40,7 @@ enum SettingMessage: Error {
             return "Delete Account"
         case .changeUnsuccessful:
             return "Change Unsuccessful"
-        case .changeToPoliceSuccessful:
+        case .changeToPolicesuccessful:
             return "Change Successful!"
         case .changeToBasicSuccessful:
             return "Change Successful!"
@@ -59,7 +59,7 @@ enum SettingMessage: Error {
             return "Are you sure you want to delete your account? This will permanently erase your account."
         case .changeUnsuccessful:
             return "Your email address is not recognized as belonging to local law enforcement. Please contact charlesshin@simple-secure.org if you would like to add your email as eligible for a police account."
-        case .changeToPoliceSuccessful:
+        case .changeToPolicesuccessful:
             return "Your account has been successfully changed to a police account."
         case .changeToBasicSuccessful:
             return "Your account has been successfully changed to a basic account."

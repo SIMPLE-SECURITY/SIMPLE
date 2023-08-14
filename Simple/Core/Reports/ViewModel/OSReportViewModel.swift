@@ -78,13 +78,13 @@ class OSReportViewModel: NSObject, ObservableObject {
         return timeLimitInSeconds < Double(timeSinceLastUploadInSeconds)
     }
     
-    func uploadReport(type: OSReportType, description: String, isAnonymous: Bool, policeIssuesReportAsAlert: Bool, showToPolicesOnly: Bool) async throws {
+    func uploadReport(type: OSReportType, description: String, isAnonymous: Bool, policeIssuesReportAsAlert: Bool, showToEmailPolicesOnly: Bool) async throws {
         guard let userLocation = userLocation else { return }
         guard let fullname = UserDefaults.standard.value(forKey: "fullname") as? String else { return }
         let userIsPolice = fullname.contains("👮‍♂️")
         var userIsCloseToLocalEnforcement = false
         
-        for location in policesLocation {
+        for location in EmailAuthenticationRequirements.shared.policesLocation {
             let eachPolicesLocation = CLLocationCoordinate2D(latitude: location[0], longitude: location[1])
             let distanceFromUserLocation = userLocation.toCLLocation().distance(from: eachPolicesLocation.toCLLocation())
             if distanceFromUserLocation <= minimumDistanceFromLocalEnforcementInMeters {
@@ -92,7 +92,7 @@ class OSReportViewModel: NSObject, ObservableObject {
                 break
             }
         }
-        if !userIsPolice { // polices have no distance restriction (for emergency or cooperation b/t polices)
+        if !userIsPolice { // EmailAuthenticationRequirements.shared.polices have no distance restriction (for emergency or cooperation b/t EmailAuthenticationRequirements.shared.polices)
             guard userIsCloseToLocalEnforcement else {
                 self.showErrorAlert = true
                 self.showLocalEnforcementDistanceAlert = true
@@ -149,7 +149,7 @@ class OSReportViewModel: NSObject, ObservableObject {
             updaterUsername: reportedByDescription,
             updaterEmail: reportedByDescriptionEmail, // updater == reporter when report is created, so anonymity should be checked
             isAnonymous: isAnonymous,
-            showToPolicesOnly: showToPolicesOnly,
+            showToPolicesOnly: showToEmailPolicesOnly,
             geohash: geohash,
             locationString: addressString,
             status: status
@@ -158,7 +158,7 @@ class OSReportViewModel: NSObject, ObservableObject {
         guard let encodedReport = try? Firestore.Encoder().encode(report) else { return }
         
         do {
-            try await COLLECTION_REPORTS.document(ref.documentID).setData(encodedReport)
+            try await EmailAuthenticationRequirements.shared.COLLECTION_REPORTS.document(ref.documentID).setData(encodedReport)
             self.didUploadReport = true
             UserDefaults.standard.set(Timestamp().dateValue(), forKey: "lastUploadTime")
         } catch {
@@ -167,7 +167,7 @@ class OSReportViewModel: NSObject, ObservableObject {
     }
     
     func resolveReport(_ report: OSReport, _ name: String, _ email: String) async {
-        try? await COLLECTION_REPORTS.document(report.id).updateData([
+        try? await EmailAuthenticationRequirements.shared.COLLECTION_REPORTS.document(report.id).updateData([
             "status": OSReportStatus.resolved.rawValue,
             "lastUpdated": Timestamp(),
             "updaterUsername": name,
@@ -179,7 +179,7 @@ class OSReportViewModel: NSObject, ObservableObject {
     }
     
     func alert(_ report: OSReport, _ name: String, _ email: String) async {
-        try? await COLLECTION_REPORTS.document(report.id).updateData([
+        try? await EmailAuthenticationRequirements.shared.COLLECTION_REPORTS.document(report.id).updateData([
             "status": OSReportStatus.confirmed.rawValue,
             "lastUpdated": Timestamp(),
             "updaterUsername": name,
@@ -191,7 +191,7 @@ class OSReportViewModel: NSObject, ObservableObject {
     }
     
     func removeReport(_ report: OSReport, _ name: String, _ email: String) async {
-        try? await COLLECTION_REPORTS.document(report.id).updateData([
+        try? await EmailAuthenticationRequirements.shared.COLLECTION_REPORTS.document(report.id).updateData([
             "status": OSReportStatus.removed.rawValue,
             "lastUpdated": Timestamp(),
             "updaterUsername": name,

@@ -47,7 +47,7 @@ class OSMapViewModel: ObservableObject {
         let queryBounds = GFUtils.queryBounds(forLocation: userLocation, withRadius: radius)
                 
         let queries = queryBounds.map { bound -> Query in
-            return COLLECTION_REPORTS
+            return EmailAuthenticationRequirements.shared.COLLECTION_REPORTS
                 .order(by: "geohash")
                 .start(at: [bound.startValue])
                 .end(at: [bound.endValue])
@@ -62,7 +62,7 @@ class OSMapViewModel: ObservableObject {
                         guard let report = try? change.document.data(as: OSReport.self) else { return }
                         
                         if !userIsPolice {
-                            guard (report.isAnonymous == false) else { continue } // if user is not police, non-anonymous reports are only displayed (anonymous reports are sent to polices for review)
+                            guard (report.isAnonymous == false) else { continue } // if user is not police, non-anonymous reports are only displayed (anonymous reports are sent to Polices for review)
                             guard (report.showToPolicesOnly == false) else { continue } // for police-only reports
                         }
                         
@@ -109,7 +109,7 @@ class OSMapViewModel: ObservableObject {
     @MainActor
     func deleteReport(_ report: OSReport) {
         Task {
-            try? await COLLECTION_REPORTS.document(report.id).delete()
+            try? await EmailAuthenticationRequirements.shared.COLLECTION_REPORTS.document(report.id).delete()
             guard let index = reports.firstIndex(where: {$0.id == report.id }) else { return }
             reports.remove(at: index)
             self.shouldUpdateReports = true

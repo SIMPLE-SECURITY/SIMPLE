@@ -8,9 +8,9 @@
 // This file is NOT USED FOR THE APP. It is for the developer to document each datapoint
 
 
-let polices =
+let EmailAuthenticationRequirements.shared.polices =
 
-// emails specially allowed to have police account (police email domains are listed in "policesEmailDomains" variable)
+// emails specially allowed to have police account (police email domains are listed in "EmailAuthenticationRequirements.shared.policesEmailDomains" variable)
 
 [
     "ashin2022@gmail.com", // personal email. for developer's administrative use
@@ -19,7 +19,7 @@ let polices =
     "thill@chadwickschool.org" // Ted Hill, Chadwick International (South Korea)
 ]
 
-let policesLocation =
+let EmailAuthenticationRequirements.shared.policesLocation =
 
 // block reporting feature if too far from any local enforcement agencies (App Store protocol)
 
@@ -98,7 +98,7 @@ let policesLocation =
     [51.50399981666908, -0.13042093186408507] // National Police Chiefs' Council
 ]
 
-let policesEmailDomains =
+let EmailAuthenticationRequirements.shared.policesEmailDomains =
 
 // all officers with these email domains are regarded as police officers
 // listed email domains from most dangerous cities + worst cities with mass shootings in the US
@@ -195,9 +195,9 @@ let policesEmailDomains =
 // US universities are only catalogued so far (+ Chadwick community, JHMI)
 // Both the police departments AND university domains (public safety officials) should be valid for police accounts
 // https://github.com/Hipo/university-domains-list
-let institutionalEmailDomains =
+let EmailAuthenticationRequirements.shared.institutionalEmailDomains =
 
-policesEmailDomains
+EmailAuthenticationRequirements.shared.policesEmailDomains
 
 +
 

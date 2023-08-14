@@ -16,7 +16,7 @@ struct CreateReportView: View {
     @State private var selectedLocationType: OSReportLocationType = .current
     @State private var showLocationSearch = false
     @State private var showInfo = false
-    @State private var policeShowInfo = false
+    @State private var policeshowInfo = false
     @State private var onlyPolicesCanSeeReport = false
     @State private var onlyPolicesCanSeeReportShowInfo = false
     @StateObject private var viewModel = OSReportViewModel()
@@ -113,7 +113,7 @@ struct CreateReportView: View {
                                 HStack {
                                     Text("Resolved or Alert")
                                     Button(action: {
-                                        self.policeShowInfo.toggle()
+                                        self.policeshowInfo.toggle()
                                     }) {
                                         Image(systemSymbol: SFSymbol.infoCircle)
                                             .foregroundColor(Color(.systemRed))
@@ -121,7 +121,7 @@ struct CreateReportView: View {
                                 }
                             }
                             .toggleStyle(CheckmarkToggleStyle())
-                            .alert(isPresented: $policeShowInfo) {
+                            .alert(isPresented: $policeshowInfo) {
                                 Alert(
                                     title: Text("Resolved or Alert"),
                                     message: Text("Police reports can be in one of two states: resolved or alerted. Resolved reports are typically used for general notifications, whereas alerted reports are reserved for emergency situations."),
@@ -177,7 +177,7 @@ struct CreateReportView: View {
                             description: description,
                             isAnonymous: shouldRemainAnonymous,
                             policeIssuesReportAsAlert: shouldBeAlerted,
-                            showToPolicesOnly: onlyPolicesCanSeeReport
+                            showToEmailPolicesOnly: onlyPolicesCanSeeReport
                         )
                     }
                 } label: {
