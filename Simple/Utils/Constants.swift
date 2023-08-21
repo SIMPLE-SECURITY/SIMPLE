@@ -8,13 +8,14 @@
 import Firebase
 import UIKit
 import Foundation
+import SwiftUI
 
-class EmailAuthenticationRequirements {
+class EmailAuthenticationRequirements: ObservableObject {
     
     static let shared = EmailAuthenticationRequirements()
+    @Published var fetchingIsComplete = false
     
-    init() {
-    }
+    init() {}
     
     func fetchAllData() {
         Task(priority: .high) {
@@ -23,6 +24,10 @@ class EmailAuthenticationRequirements {
                 try await fetchPoliceLocationData()
                 try await fetchPoliceEmailDomainsData()
                 try await fetchInstitutionalEmailDomainsData()
+                
+                withAnimation() {
+                    fetchingIsComplete = true
+                }
             } catch {
                 print("EmailAuthenticationRequirements fetch error: \(error)")
             }
