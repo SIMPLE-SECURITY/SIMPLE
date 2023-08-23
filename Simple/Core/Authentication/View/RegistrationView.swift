@@ -52,6 +52,7 @@ struct RegistrationView: View {
                 OSInputField(text: $email,
                              title: "Email Address",
                              placeholder: "name@example.com")
+                .keyboardType(.emailAddress)
                 .autocapitalization(.none)
                 .frame(maxWidth: 500)
                 
@@ -59,7 +60,7 @@ struct RegistrationView: View {
                     OSInputField(text: $password,
                                  title: "Create Password",
                                  placeholder: "Enter your password",
-                                 isSecureField: false)
+                                 isSecureField: true)
                     .autocapitalization(.none)
                     .frame(maxWidth: 500)
                     

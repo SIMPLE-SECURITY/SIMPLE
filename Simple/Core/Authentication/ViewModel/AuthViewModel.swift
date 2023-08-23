@@ -97,15 +97,16 @@ class AuthViewModel: ObservableObject {
             self.authError = AuthenticationError(localizedDescription: "emoji")
             return
         }
-        guard endsWithAny(email, EmailAuthenticationRequirements.shared.institutionalEmailDomains) else {
-            self.showAuthAlert = true
-            self.authError = AuthenticationError(localizedDescription: "registered academia")
-            return
-        }
         if registeringAsPolice {
             guard userIsPolice(email) else {
                 self.showAuthAlert = true
                 self.authError = AuthenticationError(localizedDescription: "local law enforcement")
+                return
+            }
+        } else {
+            guard endsWithAny(email, EmailAuthenticationRequirements.shared.institutionalEmailDomains) else {
+                self.showAuthAlert = true
+                self.authError = AuthenticationError(localizedDescription: "registered academia")
                 return
             }
         }
