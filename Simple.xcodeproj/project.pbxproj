@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		223BC5EA2A92E5C80096C220 /* DataLoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 223BC5E92A92E5C80096C220 /* DataLoadingView.swift */; };
 		2B0206A22979A0BA005318E3 /* LocationSearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B0206A12979A0BA005318E3 /* LocationSearchView.swift */; };
 		2B0206A42979B6F1005318E3 /* CLLocationCoordinate2D.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B0206A32979B6F1005318E3 /* CLLocationCoordinate2D.swift */; };
 		2B0206A62979CD5E005318E3 /* MapViewActionButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B0206A52979CD5E005318E3 /* MapViewActionButton.swift */; };
@@ -61,6 +62,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		223BC5E92A92E5C80096C220 /* DataLoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataLoadingView.swift; sourceTree = "<group>"; };
 		2B0206A12979A0BA005318E3 /* LocationSearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationSearchView.swift; sourceTree = "<group>"; };
 		2B0206A32979B6F1005318E3 /* CLLocationCoordinate2D.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CLLocationCoordinate2D.swift; sourceTree = "<group>"; };
 		2B0206A52979CD5E005318E3 /* MapViewActionButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewActionButton.swift; sourceTree = "<group>"; };
@@ -208,6 +210,7 @@
 				2B3E84D02972353000A0FDD7 /* Home */,
 				2BA1275A2975081B00A9E0F5 /* Reports */,
 				2BA127662975D0FF00A9E0F5 /* Settings */,
+				223BC5E92A92E5C80096C220 /* DataLoadingView.swift */,
 			);
 			path = Core;
 			sourceTree = "<group>";
@@ -475,6 +478,7 @@
 				2BAF19F4297F3ABA00F4AC1B /* GeoPoint.swift in Sources */,
 				2B2E48F029788A9300EDE277 /* Constants.swift in Sources */,
 				2B3E84F72973C9D800A0FDD7 /* OSMapViewModel.swift in Sources */,
+				223BC5EA2A92E5C80096C220 /* DataLoadingView.swift in Sources */,
 				2B3E84EC297269B400A0FDD7 /* User.swift in Sources */,
 				2B3E84BA297234BB00A0FDD7 /* SimpleApp.swift in Sources */,
 				2BA4A7BE2993F9EB006EE258 /* SettingsRowView.swift in Sources */,

@@ -9,19 +9,28 @@ import SwiftUI
 
 struct ContentContainerView: View {
     @EnvironmentObject var viewModel: AuthViewModel
+    @ObservedObject var emailAuthenticationRequirements = EmailAuthenticationRequirements.shared
     
     var body: some View {
         Group {
             if viewModel.userSession == nil {
                 LoginView()
             } else {
-                switch viewModel.emailVerificationStatus {
-                case .unverified:
-                    SendEmailVerificationView()
-                case .emailSent:
-                    EmailVerificationView()
-                case .verified:
-                    ContentView()
+                if emailAuthenticationRequirements.fetchingIsComplete {
+                    VStack {
+                        switch viewModel.emailVerificationStatus {
+                        case .unverified:
+                            SendEmailVerificationView()
+                        case .emailSent:
+                            EmailVerificationView()
+                        case .verified:
+                            ContentView()
+                        }
+                    }
+                    .transition(.move(edge: .trailing))
+                } else {
+                    DataLoadingView()
+                        .transition(.move(edge: .leading))
                 }
             }
         }

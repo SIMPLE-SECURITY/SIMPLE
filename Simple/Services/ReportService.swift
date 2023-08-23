@@ -17,7 +17,7 @@ struct ReportService {
         let diffInMinutes = diff / 60
         
         if diffInMinutes >= 15 {
-            try? await COLLECTION_REPORTS.document(report.id).delete()
+            try? await EmailAuthenticationRequirements.shared.COLLECTION_REPORTS.document(report.id).delete()
         }
     }
 }

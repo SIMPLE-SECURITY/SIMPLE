@@ -59,7 +59,7 @@ class AuthViewModel: ObservableObject {
     }
     
     func userIsPolice(_ email: String) -> Bool {
-        return polices.contains(email) || endsWithAny(email, policesEmailDomains)
+        return EmailAuthenticationRequirements.shared.polices.contains(email) || endsWithAny(email, EmailAuthenticationRequirements.shared.policesEmailDomains)
     }
     
     func userIsCataloguedAsPolice(_ fullname: String) -> Bool {
@@ -97,7 +97,7 @@ class AuthViewModel: ObservableObject {
             self.authError = AuthenticationError(localizedDescription: "emoji")
             return
         }
-        guard endsWithAny(email, institutionalEmailDomains) else {
+        guard endsWithAny(email, EmailAuthenticationRequirements.shared.institutionalEmailDomains) else {
             self.showAuthAlert = true
             self.authError = AuthenticationError(localizedDescription: "registered academia")
             return
@@ -183,7 +183,7 @@ class AuthViewModel: ObservableObject {
         
         // if police account is invalid now, then downgrade to basic account so as to prevent malicious use
         if userIsCataloguedAsPolice(userName) && !userIsPolice(userEmail) {
-            try? await COLLECTION_USERS.document(uid).updateData([
+            try? await EmailAuthenticationRequirements.shared.COLLECTION_USERS.document(uid).updateData([
                 "fullname": String(userName.prefix(userName.count - 2))
             ])
         }
@@ -210,18 +210,18 @@ class AuthViewModel: ObservableObject {
 
         // only regular -> police should be verified
         if userIsCataloguedAsPolice(userName) { // police -> regular
-            try? await COLLECTION_USERS.document(uid).updateData([
+            try? await EmailAuthenticationRequirements.shared.COLLECTION_USERS.document(uid).updateData([
                 "fullname": String(userName.prefix(userName.count - 2))
             ])
             self.showSettingAlert = true
             self.settingMessage = .changeToBasicSuccessful
         } else {
             if userIsPolice(userEmail) {
-                try? await COLLECTION_USERS.document(uid).updateData([
+                try? await EmailAuthenticationRequirements.shared.COLLECTION_USERS.document(uid).updateData([
                     "fullname": userName + " 👮‍♂️"
                 ])
                 self.showSettingAlert = true
-                self.settingMessage = .changeToPoliceSuccessful
+                self.settingMessage = .changeToPolicesuccessful
             } else {
                 self.showSettingAlert = true
                 self.settingMessage = .changeUnsuccessful
