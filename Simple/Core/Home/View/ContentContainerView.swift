@@ -15,16 +15,20 @@ struct ContentContainerView: View {
         Group {
             if viewModel.userSession == nil {
                 LoginView()
+                    .transition(.move(edge: .leading))
             } else {
                 if emailAuthenticationRequirements.fetchingIsComplete {
                     VStack {
                         switch viewModel.emailVerificationStatus {
                         case .unverified:
                             SendEmailVerificationView()
+                                .transition(.move(edge: .leading))
                         case .emailSent:
                             EmailVerificationView()
+                                .transition(.asymmetric(insertion: .move(edge: .trailing), removal: .move(edge: .leading)))
                         case .verified:
                             ContentView()
+                                .transition(.move(edge: .trailing))
                         }
                     }
                     .transition(.move(edge: .trailing))

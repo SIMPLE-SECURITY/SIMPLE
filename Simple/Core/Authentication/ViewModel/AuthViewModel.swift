@@ -10,6 +10,8 @@ import FirebaseAuth
 import FirebaseFirestoreSwift
 import GeoFire
 import GeoFireUtils
+import SwiftUI
+import Foundation
 
 enum EmailVerificationStatus: Int, Codable {
     case unverified
@@ -51,7 +53,10 @@ class AuthViewModel: ObservableObject {
     
     init() {
         userSession = Auth.auth().currentUser
-        self.emailVerificationStatus = userSession?.isEmailVerified ?? false ? .verified : .unverified
+        
+        withAnimation {
+            self.emailVerificationStatus = userSession?.isEmailVerified ?? false ? .verified : .unverified
+        }
         
         Task {
             await fetchUser()
@@ -80,7 +85,9 @@ class AuthViewModel: ObservableObject {
         do {
             let result = try await Auth.auth().signIn(withEmail: email, password: password)
             self.userSession = result.user
-            self.emailVerificationStatus = userSession?.isEmailVerified ?? false ? .verified : .unverified
+            withAnimation {
+                self.emailVerificationStatus = userSession?.isEmailVerified ?? false ? .verified : .unverified
+            }
             await fetchUser()
         } catch {
             print("DEBUG: Failed to sign in with error \(error.localizedDescription)")
@@ -135,7 +142,9 @@ class AuthViewModel: ObservableObject {
     func sendVerificationEmail() async throws {
         do {
             try await Auth.auth().currentUser?.sendEmailVerification()
-            emailVerificationStatus = .emailSent
+            withAnimation {
+                emailVerificationStatus = .emailSent
+            }
         } catch {
             print("DEBUG: Failed to send verification email with error: \(error.localizedDescription)")
             self.showAuthAlert = true
@@ -149,7 +158,9 @@ class AuthViewModel: ObservableObject {
             try await Auth.auth().currentUser?.reload()
             self.userSession = Auth.auth().currentUser
             if let userSession = self.userSession, userSession.isEmailVerified {
-                self.emailVerificationStatus = .verified
+                withAnimation {
+                    self.emailVerificationStatus = .verified
+                }
                 await fetchUser()
             } else {
                 self.showAuthAlert = true
@@ -251,7 +262,9 @@ class AuthViewModel: ObservableObject {
             try await Auth.auth().currentUser?.delete()
             self.currentUser = nil
             self.userSession = nil
-            self.emailVerificationStatus = .unverified
+            withAnimation {
+                self.emailVerificationStatus = .unverified
+            }
         } catch {
             print("DEBUG: Failed to delete account with error \(error.localizedDescription)")
             self.showSettingAlert = true
