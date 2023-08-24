@@ -31,6 +31,7 @@ struct LoginView: View {
                             OSInputField(text: $email,
                                          title: "Email Address",
                                          placeholder: "name@example.com")
+                            .textContentType(.email)
                             .autocapitalization(.none)
                             .frame(maxWidth: 500)
                             
@@ -39,6 +40,7 @@ struct LoginView: View {
                                              title: "Password",
                                              placeholder: "Enter your password",
                                              isSecureField: true)
+                                .textContentType(.password)
                                 .autocapitalization(.none)
                                 .frame(maxWidth: 500)
                                 
