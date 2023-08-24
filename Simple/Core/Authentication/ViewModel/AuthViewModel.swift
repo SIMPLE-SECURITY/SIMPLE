@@ -48,6 +48,7 @@ class AuthViewModel: ObservableObject {
     @Published var authError: AuthenticationError?
     @Published var showAuthAlert = false
     @Published var settingMessage: SettingMessage?
+    @Published var deleteAccountConfirmationText = ""
     @Published var showSettingAlert = false
     let locationManager = LocationManager.shared
     
@@ -257,7 +258,15 @@ class AuthViewModel: ObservableObject {
     }
     
     @MainActor
+    func deleteConfirmation2() {
+        self.settingMessage = .confirmingDelete2
+        self.showSettingAlert = true
+    }
+    
+    @MainActor
     func deleteAccount() async throws {
+        guard self.deleteAccountConfirmationText == "confirm" else { return }
+        self.deleteAccountConfirmationText = ""
         do {
             try await Auth.auth().currentUser?.delete()
             self.currentUser = nil

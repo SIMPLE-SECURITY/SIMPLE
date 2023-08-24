@@ -177,21 +177,30 @@ struct SettingsView: View {
             }
         }
         .frame(maxHeight: .infinity)
-        .alert(isPresented: $viewModel.showSettingAlert, content: {
+        .alert(viewModel.settingMessage?.title ?? "", isPresented: $viewModel.showSettingAlert, actions: {
             switch viewModel.settingMessage {
             case .confirmingDelete:
-                return Alert(
-                    title: Text(SettingMessage.confirmingDelete.title), message: Text(SettingMessage.confirmingDelete.description),
-                    primaryButton: .destructive(Text("Delete")) {
-                        Task {
-                            try await viewModel.deleteAccount()
-                        }
-                    },
-                    secondaryButton: .cancel()
-                )
+                Button("Cancel", role: .cancel) {}
+                Button("Delete", role: .destructive) {
+                    DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(500)) {
+                        viewModel.deleteConfirmation2()
+                    }
+                }
+            case .confirmingDelete2:
+                TextField("", text: $viewModel.deleteAccountConfirmationText)
+                Button("Cancel", role: .cancel) {
+                    viewModel.deleteAccountConfirmationText = ""
+                }
+                Button("Delete", role: .destructive) {
+                    Task {
+                        try await viewModel.deleteAccount()
+                    }
+                }
             default:
-                return Alert(title: Text(viewModel.settingMessage?.title ?? SettingMessage.unknown.title), message: Text(viewModel.settingMessage?.description ?? SettingMessage.unknown.description))
+                Button("ok") {}
             }
+        }, message: {
+            Text(viewModel.settingMessage?.description ?? "")
         })
     }
 }
