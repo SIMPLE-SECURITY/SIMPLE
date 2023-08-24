@@ -61,7 +61,7 @@ enum SettingMessage: Error {
         case .confirmingDelete:
             return "Are you sure you want to delete your account? This will permanently erase your account."
         case .confirmingDelete2:
-            return "Are you sure you want to delete your account? This will permanently erase your account. Type confirm to **continue**."
+            return "Are you sure you want to delete your account? This will permanently erase your account. Type \"confirm\" to continue."
         case .changeUnsuccessful:
             return "Your email address is not recognized as belonging to local law enforcement. Please contact charlesshin@simple-secure.org if you would like to add your email as eligible for a police account."
         case .changeToPolicesuccessful:
