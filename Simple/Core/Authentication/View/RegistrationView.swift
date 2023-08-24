@@ -27,6 +27,7 @@ struct RegistrationView: View {
     @State private var fullname = ""
     @State private var email = ""
     @State private var password = ""
+    @State var showPassword = false
     @State private var registerAsPolice = false
     @Environment(\.dismiss) private var dismiss
     @EnvironmentObject var viewModel: AuthViewModel
@@ -47,20 +48,32 @@ struct RegistrationView: View {
                              title: "Full Name",
                              placeholder: "Enter your name")
                 .autocapitalization(.none)
+                .textContentType(.name)
                 .frame(maxWidth: 500)
                 
                 OSInputField(text: $email,
                              title: "Email Address",
                              placeholder: "name@example.com")
+                .keyboardType(.emailAddress)
+                .textContentType(.emailAddress)
                 .autocapitalization(.none)
                 .frame(maxWidth: 500)
                 
                 VStack(spacing: 10) {
-                    OSInputField(text: $password,
-                                 title: "Create Password",
-                                 placeholder: "Enter your password",
-                                 isSecureField: false)
-                    .autocapitalization(.none)
+                    HStack {
+                        OSInputField(text: $password,
+                                     title: "Create Password",
+                                     placeholder: "Enter your password",
+                                     isSecureField: !showPassword)
+                        .textContentType(.newPassword)
+                        .autocapitalization(.none)
+                        Button {
+                            showPassword.toggle()
+                        } label: {
+                            Image(systemSymbol: showPassword ? .eye : .eyeSlash)
+                        }
+                    }
+                    .foregroundColor(.primary)
                     .frame(maxWidth: 500)
                     
                     Toggle(isOn: $registerAsPolice) {

@@ -25,8 +25,10 @@ class EmailAuthenticationRequirements: ObservableObject {
                 try await fetchPoliceEmailDomainsData()
                 try await fetchInstitutionalEmailDomainsData()
                 
-                withAnimation() {
-                    fetchingIsComplete = true
+                DispatchQueue.main.async {
+                    withAnimation {
+                        self.fetchingIsComplete = true
+                    }
                 }
             } catch {
                 print("EmailAuthenticationRequirements fetch error: \(error)")

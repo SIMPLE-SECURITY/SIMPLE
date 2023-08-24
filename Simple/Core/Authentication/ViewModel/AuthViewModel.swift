@@ -10,6 +10,8 @@ import FirebaseAuth
 import FirebaseFirestoreSwift
 import GeoFire
 import GeoFireUtils
+import SwiftUI
+import Foundation
 
 enum EmailVerificationStatus: Int, Codable {
     case unverified
@@ -46,12 +48,16 @@ class AuthViewModel: ObservableObject {
     @Published var authError: AuthenticationError?
     @Published var showAuthAlert = false
     @Published var settingMessage: SettingMessage?
+    @Published var deleteAccountConfirmationText = ""
     @Published var showSettingAlert = false
     let locationManager = LocationManager.shared
     
     init() {
         userSession = Auth.auth().currentUser
-        self.emailVerificationStatus = userSession?.isEmailVerified ?? false ? .verified : .unverified
+        
+        withAnimation {
+            self.emailVerificationStatus = userSession?.isEmailVerified ?? false ? .verified : .unverified
+        }
         
         Task {
             await fetchUser()
@@ -80,7 +86,9 @@ class AuthViewModel: ObservableObject {
         do {
             let result = try await Auth.auth().signIn(withEmail: email, password: password)
             self.userSession = result.user
-            self.emailVerificationStatus = userSession?.isEmailVerified ?? false ? .verified : .unverified
+            withAnimation {
+                self.emailVerificationStatus = userSession?.isEmailVerified ?? false ? .verified : .unverified
+            }
             await fetchUser()
         } catch {
             print("DEBUG: Failed to sign in with error \(error.localizedDescription)")
@@ -97,15 +105,16 @@ class AuthViewModel: ObservableObject {
             self.authError = AuthenticationError(localizedDescription: "emoji")
             return
         }
-        guard endsWithAny(email, EmailAuthenticationRequirements.shared.institutionalEmailDomains) else {
-            self.showAuthAlert = true
-            self.authError = AuthenticationError(localizedDescription: "registered academia")
-            return
-        }
         if registeringAsPolice {
             guard userIsPolice(email) else {
                 self.showAuthAlert = true
                 self.authError = AuthenticationError(localizedDescription: "local law enforcement")
+                return
+            }
+        } else {
+            guard endsWithAny(email, EmailAuthenticationRequirements.shared.institutionalEmailDomains) else {
+                self.showAuthAlert = true
+                self.authError = AuthenticationError(localizedDescription: "registered academia")
                 return
             }
         }
@@ -134,7 +143,9 @@ class AuthViewModel: ObservableObject {
     func sendVerificationEmail() async throws {
         do {
             try await Auth.auth().currentUser?.sendEmailVerification()
-            emailVerificationStatus = .emailSent
+            withAnimation {
+                emailVerificationStatus = .emailSent
+            }
         } catch {
             print("DEBUG: Failed to send verification email with error: \(error.localizedDescription)")
             self.showAuthAlert = true
@@ -148,7 +159,9 @@ class AuthViewModel: ObservableObject {
             try await Auth.auth().currentUser?.reload()
             self.userSession = Auth.auth().currentUser
             if let userSession = self.userSession, userSession.isEmailVerified {
-                self.emailVerificationStatus = .verified
+                withAnimation {
+                    self.emailVerificationStatus = .verified
+                }
                 await fetchUser()
             } else {
                 self.showAuthAlert = true
@@ -245,12 +258,22 @@ class AuthViewModel: ObservableObject {
     }
     
     @MainActor
+    func deleteConfirmation2() {
+        self.settingMessage = .confirmingDelete2
+        self.showSettingAlert = true
+    }
+    
+    @MainActor
     func deleteAccount() async throws {
+        guard self.deleteAccountConfirmationText == "confirm" else { return }
+        self.deleteAccountConfirmationText = ""
         do {
             try await Auth.auth().currentUser?.delete()
             self.currentUser = nil
             self.userSession = nil
-            self.emailVerificationStatus = .unverified
+            withAnimation {
+                self.emailVerificationStatus = .unverified
+            }
         } catch {
             print("DEBUG: Failed to delete account with error \(error.localizedDescription)")
             self.showSettingAlert = true

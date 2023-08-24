@@ -12,6 +12,7 @@ struct LoginView: View {
     @Environment(\.colorScheme) var colorScheme
     @State var email = ""
     @State var password = ""
+    @State var showPassword = false
     @EnvironmentObject var viewModel: AuthViewModel
     @ObservedObject var emailAuthenticationRequirements = EmailAuthenticationRequirements.shared
     
@@ -31,15 +32,25 @@ struct LoginView: View {
                             OSInputField(text: $email,
                                          title: "Email Address",
                                          placeholder: "name@example.com")
+                            .textContentType(.emailAddress)
                             .autocapitalization(.none)
                             .frame(maxWidth: 500)
                             
                             VStack(spacing: 10) {
-                                OSInputField(text: $password,
-                                             title: "Password",
-                                             placeholder: "Enter your password",
-                                             isSecureField: true)
-                                .autocapitalization(.none)
+                                HStack {
+                                    OSInputField(text: $password,
+                                                 title: "Password",
+                                                 placeholder: "Enter your password",
+                                                 isSecureField: !showPassword)
+                                    .textContentType(.password)
+                                    .autocapitalization(.none)
+                                    Button {
+                                        showPassword.toggle()
+                                    } label: {
+                                        Image(systemSymbol: showPassword ? .eye : .eyeSlash)
+                                    }
+                                }
+                                .foregroundColor(.primary)
                                 .frame(maxWidth: 500)
                                 
                                 NavigationLink {
