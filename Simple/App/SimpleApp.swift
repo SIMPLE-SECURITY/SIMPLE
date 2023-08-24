@@ -7,6 +7,7 @@
 
 import SwiftUI
 import Firebase
+@_exported import SFSafeSymbols
 
 class AppDelegate: NSObject, UIApplicationDelegate {
     func application(_ application: UIApplication,
